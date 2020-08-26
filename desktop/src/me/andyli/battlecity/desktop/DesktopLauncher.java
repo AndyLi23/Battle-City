@@ -12,15 +12,15 @@ public class DesktopLauncher {
 		if(SystemUtils.IS_OS_WINDOWS || SystemUtils.IS_OS_LINUX || SystemUtils.IS_OS_MAC) {
 			LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 
-			config.title = "TKO 1351 Circuit Simulator";
-			//config.addIcon("img/logo/logo3.png", Files.FileType.Internal);
+			config.title = "Battle City";
+			config.addIcon("img/tank.png", Files.FileType.Internal);
 			config.resizable = false;
-			config.width = 1366;
-			config.height = 768;
+			config.width = 624; //16*3 by 13
+			config.height = 624; //16*3 by 13
 
 			new LwjglApplication(new Main(), config);
 		} else {
-			System.out.println("Incompatible Operating System. \nIf you aren't using Windows, Linux, or Mac, wtf are you using?");
+			System.out.println("Incompatible Operating System.");
 		}
 	}
 }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.math.Vector2;
 
 public class Tools {
 
@@ -19,6 +20,13 @@ public class Tools {
         BitmapFont fnt = generator.generateFont(parameter);
         generator.dispose();
         return fnt;
+    }
+
+    public static boolean collide(Vector2 r1p1, Vector2 r1p2, Vector2 r2p1, Vector2 r2p2) {
+        return !(r1p2.x < r2p1.x ||
+                r1p2.y < r2p1.y ||
+                r1p1.x > r2p2.x ||
+                r1p1.y > r2p2.y);
     }
 
 }
