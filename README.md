@@ -1,2 +1,2 @@
-# Battle-City
-A Java clone of Battle City, made with LibGDX
+# Battle City
+A clone of Battle City written in Java using LibGDX
