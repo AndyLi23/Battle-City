@@ -15,7 +15,7 @@ public class DesktopLauncher {
 			config.title = "Battle City";
 			config.addIcon("img/tank.png", Files.FileType.Internal);
 			config.resizable = false;
-			config.width = 624; //16*3 by 13
+			config.width = 800; //16*3 by 13
 			config.height = 624; //16*3 by 13
 
 			new LwjglApplication(new Main(), config);

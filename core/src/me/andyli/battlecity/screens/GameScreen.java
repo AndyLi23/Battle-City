@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import me.andyli.battlecity.blocks.BlockManager;
 import me.andyli.battlecity.tanks.Player;
+import me.andyli.battlecity.tanks.TankManager;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -24,13 +25,18 @@ public class GameScreen implements Screen {
     private int map;
     private BufferedReader br;
     private String arr[];
-    private BlockManager blockManager;
+    public BlockManager blockManager;
+    public TankManager tankManager;
+
 
     public GameScreen(final Game game, int map) {
+
+        renderer = new ShapeRenderer();
+
+
         this.map = map;
         this.game = game;
         this.batch = new SpriteBatch();
-        this.renderer = new ShapeRenderer();
         this.stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()), batch);
         arr = new String[19];
 
@@ -48,12 +54,21 @@ public class GameScreen implements Screen {
         }
 
         blockManager = new BlockManager(arr);
+        tankManager = new TankManager();
 
 
     }
 
     @Override
     public void render(float delta) {
+        renderer.begin(ShapeRenderer.ShapeType.Filled);
+        renderer.setColor(0, 0, 0, 1);
+        renderer.rect(0, 0, 624, 624);
+
+        renderer.end();
+
+        blockManager.updateGround(batch);
+        tankManager.updateBullets(batch);
         player.update(batch);
         blockManager.update(batch);
     }

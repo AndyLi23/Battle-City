@@ -1,0 +1,147 @@
+package me.andyli.battlecity.tanks;
+
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import me.andyli.battlecity.blocks.Block;
+import me.andyli.battlecity.blocks.BlockManager;
+import me.andyli.battlecity.blocks.Ice;
+
+public class Tank {
+    public int speed, direction, cooldown, cd;
+    public Vector2 position, vel;
+    public Sprite base;
+
+    public Tank(Vector2 position, int speed, int direction, Sprite base, int cd) {
+        this.position = position;
+        this.speed = speed;
+        this.direction = direction;
+        this.vel = new Vector2(0, 0);
+        this.cd = cd;
+
+        this.base = base;
+        base.setPosition(position.x, position.y);
+    }
+
+    public void update(SpriteBatch batch) {
+
+        if(cooldown != 0) {
+            cooldown--;
+        }
+
+        takeInput();
+
+        updateVel();
+
+        position.add(vel);
+
+        if(collide(direction) != null && !(collide(direction) instanceof Ice)) {
+            position.sub(vel);
+        }
+
+        if(position.x < 0) {
+            position.x = 0;
+        }
+        if(position.x > 585) {
+            position.x = 585;
+        }
+        if(position.y < 0) {
+            position.y = 0;
+        }
+        if(position.y > 585) {
+            position.y = 585;
+        }
+
+        base.setPosition(position.x, position.y);
+        base.rotate(direction*90-base.getRotation());
+
+        batch.begin();
+        base.draw(batch);
+        batch.end();
+    }
+
+    public void updateVel() {
+        if(direction == 0) {
+            vel.x = 0;
+            vel.y = speed;
+        }
+        if(direction == 2) {
+            vel.x = 0;
+            vel.y = -1*speed;
+        }
+        if(direction == 1) {
+            vel.y = 0;
+            vel.x = speed;
+        }
+        if(direction == 3) {
+            vel.y = 0;
+            vel.x = -1*speed;
+        }
+    }
+
+    public Block collide(int direction) {
+        int y1 = 12-((int) position.y / 48);
+        int y2 = 12-((int) (position.y+39)/48);
+        int x1 = (int) position.x / 48;
+        int x2 = (int) (position.x+39)/48;
+
+        Vector2 r1p1 = new Vector2(position.x, position.y);
+        Vector2 r1p2 = new Vector2(position.x+39, position.y+39);
+
+        if(y1 == -1 || x1 == 13 || y2 == -1 || x2 == 13) {
+            return null;
+        }
+
+        if(direction == 0) {
+            for(int i = x1; i <= x2; ++i) {
+                if(BlockManager.arr[y2][i] != null && BlockManager.arr[y2][i].collideTank(r1p1,r1p2)) {
+                    return BlockManager.arr[y2][i];
+                }
+            }
+        } else if(direction == 2) {
+            for(int i = x1; i <= x2; ++i) {
+                if(BlockManager.arr[y1][i] != null && BlockManager.arr[y1][i].collideTank(r1p1,r1p2)) {
+                    return BlockManager.arr[y1][i];
+                }
+            }
+        } else if (direction == 1) {
+            for(int i = y2; i <= y1; ++i) {
+                if(BlockManager.arr[i][x1] != null && BlockManager.arr[i][x1].collideTank(r1p1,r1p2)) {
+                    return BlockManager.arr[i][x1];
+                }
+            }
+        } else if (direction == 3) {
+            for(int i = y2; i <= y1; ++i) {
+                if(BlockManager.arr[i][x2] != null && BlockManager.arr[i][x2].collideTank(r1p1,r1p2)) {
+                    return BlockManager.arr[i][x2];
+                }
+            }
+        }
+
+
+
+        return null;
+    }
+
+    public void fire() {
+        if(cooldown == 0) {
+            Vector2 temp;
+            if (direction == 0) {
+                temp = new Vector2(0, 10);
+            } else if (direction == 2) {
+                temp = new Vector2(0, -10);
+            } else if (direction == 1) {
+                temp = new Vector2(-10, 0);
+            } else {
+                temp = new Vector2(10, 0);
+            }
+            Bullet b = new Bullet(new Vector2(position.x + 17, position.y + 17), temp, direction);
+            TankManager.bullets.add(b);
+            cooldown = cd;
+        }
+    }
+
+    public void takeInput() {
+
+    }
+}
