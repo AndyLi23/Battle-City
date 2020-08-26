@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import me.andyli.battlecity.blocks.Block;
 import me.andyli.battlecity.blocks.BlockManager;
 import me.andyli.battlecity.blocks.Ice;
+import me.andyli.battlecity.blocks.Spawner;
 import me.andyli.battlecity.screens.GameScreen;
 import me.andyli.battlecity.utility.Tools;
 
@@ -15,12 +16,14 @@ public class Tank {
     public Vector2 position, vel;
     public Sprite base;
     private int[] list;
+    private int countdown;
 
     public Tank(Vector2 position, int speed, int direction, Sprite base, int cd, int health) {
         this.position = position;
         this.speed = speed;
         this.direction = direction;
         this.vel = new Vector2(0, 0);
+        updateVel();
         this.cd = cd;
 
         this.health = health;
@@ -29,9 +32,13 @@ public class Tank {
 
         this.base = base;
         base.setPosition(position.x, position.y);
+        countdown = 40;
     }
 
     public void update(SpriteBatch batch) {
+        if(countdown > 0) {
+            countdown--;
+        }
 
         if(health == 0) {
             TankManager.tanks.removeValue(this, true);
@@ -50,7 +57,7 @@ public class Tank {
 
             position.add(vel);
 
-            if (collideTank() || (collide(direction) != null && !(collide(direction) instanceof Ice))) {
+            if ((countdown == 0 || (this instanceof Player)) && ((collideTank() && this instanceof Player) || (collide(direction) != null && !(collide(direction) instanceof Ice)))) {
                 position.sub(vel);
             }
 
@@ -173,12 +180,14 @@ public class Tank {
     }
 
     public void takeInput() {
-        if(Tools.choose(60)) {
-            direction = Tools.selectRandom(list);
-        }
+        if(countdown == 0) {
+            if (Tools.choose(60)) {
+                direction = Tools.selectRandom(list);
+            }
 
-        if(Tools.choose(4)) {
-            fire();
+            if (Tools.choose(4)) {
+                fire();
+            }
         }
     }
 }
