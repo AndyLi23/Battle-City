@@ -10,16 +10,18 @@ import me.andyli.battlecity.blocks.Ice;
 import me.andyli.battlecity.utility.Tools;
 
 public class Tank {
-    public int speed, direction, cooldown, cd;
+    public int speed, direction, cooldown, cd, health;
     public Vector2 position, vel;
     public Sprite base;
 
-    public Tank(Vector2 position, int speed, int direction, Sprite base, int cd) {
+    public Tank(Vector2 position, int speed, int direction, Sprite base, int cd, int health) {
         this.position = position;
         this.speed = speed;
         this.direction = direction;
         this.vel = new Vector2(0, 0);
         this.cd = cd;
+
+        this.health = health;
 
         this.base = base;
         base.setPosition(position.x, position.y);
