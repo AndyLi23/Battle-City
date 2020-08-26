@@ -26,9 +26,18 @@ public class TankManager {
         }
     }
 
-    public void addTank(int type) {
+    public static boolean containsPlayer() {
+        for(Tank t : tanks) {
+            if(t instanceof Player) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void addTank(int type, Vector2 position, int direction) {
         if(type == 0) {
-            tanks.add(new Tank(new Vector2(0, 500), 2, 2, new Sprite(new Texture(Gdx.files.internal("img/tank1.png"))), 50, 1));
+            tanks.add(new Tank(position, 2, direction, new Sprite(new Texture(Gdx.files.internal("img/tank1.png"))), 50, 1));
         }
     }
 

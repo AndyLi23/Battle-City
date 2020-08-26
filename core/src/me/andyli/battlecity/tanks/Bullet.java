@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.sun.scenario.effect.impl.sw.java.JSWBlend_MULTIPLYPeer;
 import me.andyli.battlecity.blocks.BlockManager;
 import me.andyli.battlecity.utility.Tools;
 
@@ -54,7 +55,9 @@ public class Bullet {
                 r2p2 = new Vector2(t.position.x+39, t.position.y+39);
 
                 if(Tools.collide(r1p1, r1p2, t.position, r2p2)) {
-                    t.health--;
+                    if(t instanceof Player || parent instanceof Player) {
+                        t.health--;
+                    }
                     return true;
                 }
             }
@@ -66,8 +69,8 @@ public class Bullet {
         for(int i = 0; i < TankManager.bullets.size; ++i) {
             if(!TankManager.bullets.get(i).equals(this)) {
                 r1p1 = new Vector2(position.x, position.y);
-                r1p2 = new Vector2(position.x + 5, position.y + 5);
-                r2p2 = new Vector2(TankManager.bullets.get(i).position.x + 5, TankManager.bullets.get(i).position.y + 5);
+                r1p2 = new Vector2(position.x + 9, position.y + 9);
+                r2p2 = new Vector2(TankManager.bullets.get(i).position.x + 9, TankManager.bullets.get(i).position.y + 9);
                 if (Tools.collide(r1p1, r1p2, TankManager.bullets.get(i).position, r2p2)) {
                     TankManager.bullets.removeIndex(i);
                     return true;

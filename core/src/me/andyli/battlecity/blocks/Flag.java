@@ -1,10 +1,12 @@
 package me.andyli.battlecity.blocks;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import me.andyli.battlecity.screens.GameScreen;
 import me.andyli.battlecity.utility.Tools;
 
 public class Flag extends Block {
@@ -18,7 +20,7 @@ public class Flag extends Block {
         base = new Sprite(new Texture(Gdx.files.internal("img/flag.png")));
         base.setPosition(position.x, position.y);
 
-        health = 2;
+        health = 3;
 
     }
 
@@ -32,6 +34,7 @@ public class Flag extends Block {
         health--;
         if(health == 0) {
             BlockManager.arr[x][y] = null;
+            GameScreen.gameOver();
         }
         return Tools.collide(r1p1, r1p2, position, position2);
     }

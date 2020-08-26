@@ -7,12 +7,14 @@ import com.badlogic.gdx.math.Vector2;
 import me.andyli.battlecity.blocks.Block;
 import me.andyli.battlecity.blocks.BlockManager;
 import me.andyli.battlecity.blocks.Ice;
+import me.andyli.battlecity.screens.GameScreen;
 import me.andyli.battlecity.utility.Tools;
 
 public class Tank {
     public int speed, direction, cooldown, cd, health;
     public Vector2 position, vel;
     public Sprite base;
+    private int[] list;
 
     public Tank(Vector2 position, int speed, int direction, Sprite base, int cd, int health) {
         this.position = position;
@@ -23,6 +25,8 @@ public class Tank {
 
         this.health = health;
 
+        list = new int[]{0,1,2,3};
+
         this.base = base;
         base.setPosition(position.x, position.y);
     }
@@ -31,6 +35,9 @@ public class Tank {
 
         if(health == 0) {
             TankManager.tanks.removeValue(this, true);
+            if(this instanceof Player) {
+                GameScreen.gameOver();
+            }
         } else {
 
             if (cooldown != 0) {
@@ -78,11 +85,11 @@ public class Tank {
             vel.x = 0;
             vel.y = -1*speed;
         }
-        if(direction == 1) {
+        if(direction == 3) {
             vel.y = 0;
             vel.x = speed;
         }
-        if(direction == 3) {
+        if(direction == 1) {
             vel.y = 0;
             vel.x = -1*speed;
         }
@@ -98,7 +105,7 @@ public class Tank {
         Vector2 r1p2 = new Vector2(position.x+39, position.y+39);
 
         if(y1 == -1 || x1 == 13 || y2 == -1 || x2 == 13) {
-            return null;
+            return new Block(new Vector2(0, 0), 0, 0);
         }
 
         if(direction == 0) {
@@ -159,13 +166,19 @@ public class Tank {
             } else {
                 temp = new Vector2(10, 0);
             }
-            Bullet b = new Bullet(new Vector2(position.x + 17, position.y + 17), temp, direction, this);
+            Bullet b = new Bullet(new Vector2(position.x + 18, position.y + 17), temp, direction, this);
             TankManager.bullets.add(b);
             cooldown = cd;
         }
     }
 
     public void takeInput() {
-        fire();
+        if(Tools.choose(60)) {
+            direction = Tools.selectRandom(list);
+        }
+
+        if(Tools.choose(4)) {
+            fire();
+        }
     }
 }

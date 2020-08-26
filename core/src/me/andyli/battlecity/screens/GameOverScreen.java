@@ -15,48 +15,22 @@ import me.andyli.battlecity.tanks.TankManager;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
-public class GameScreen implements Screen {
+public class GameOverScreen implements Screen {
 
     private final Stage stage;
-    private static Game game;
+    private final Game game;
     private final SpriteBatch batch;
     private final ShapeRenderer renderer;
-    private int map;
-    private BufferedReader br;
-    private String arr[];
-    public BlockManager blockManager;
-    public static TankManager tankManager;
-    public static int left;
 
 
-    public GameScreen(final Game game, int map) {
+    public GameOverScreen(final Game game) {
 
         renderer = new ShapeRenderer();
 
 
-        this.map = map;
-        GameScreen.game = game;
+        this.game = game;
         this.batch = new SpriteBatch();
         this.stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()), batch);
-        arr = new String[19];
-
-        try {
-            br = new BufferedReader(new FileReader(Gdx.files.internal("maps/" + this.map + ".txt").file()));
-
-            for(int i = 0; i < 13; ++i) {
-                arr[i] = br.readLine();
-            }
-
-        } catch (Exception e) {
-            Gdx.app.exit();
-        }
-
-        blockManager = new BlockManager(arr);
-        tankManager = new TankManager();
-
-        tankManager.addTank(new Player(new Vector2(0, 0)));
-
-        left = 17;
 
 
     }
@@ -65,20 +39,11 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.setColor(0, 0, 0, 1);
-        renderer.rect(0, 0, 624, 624);
+        renderer.rect(0, 0, 800, 624);
 
         renderer.end();
 
-        blockManager.updateGround(batch);
-        tankManager.updateBullets(batch);
-        tankManager.updateTanks(batch);
-        blockManager.update(batch);
     }
-
-    public static void gameOver() {
-        game.setScreen(new GameOverScreen(game));
-    }
-
 
 
     @Override
