@@ -1,11 +1,13 @@
 package me.andyli.battlecity.tanks;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import me.andyli.battlecity.blocks.Block;
 import me.andyli.battlecity.blocks.BlockManager;
 import me.andyli.battlecity.blocks.Ice;
+import me.andyli.battlecity.utility.Tools;
 
 public class Tank {
     public int speed, direction, cooldown, cd;
@@ -35,7 +37,7 @@ public class Tank {
 
         position.add(vel);
 
-        if(collide(direction) != null && !(collide(direction) instanceof Ice)) {
+        if(collideTank() || (collide(direction) != null && !(collide(direction) instanceof Ice))) {
             position.sub(vel);
         }
 
@@ -121,6 +123,21 @@ public class Tank {
 
 
         return null;
+    }
+
+    public boolean collideTank() {
+        Vector2 r1p1 = new Vector2(position.x, position.y);
+        Vector2 r1p2 = new Vector2(position.x+39, position.y+39);
+
+        for(int i = 0; i < TankManager.tanks.size; ++i) {
+            if(!TankManager.tanks.get(i).equals(this)) {
+                Vector2 r2p2 = new Vector2(TankManager.tanks.get(i).position.x + 39, TankManager.tanks.get(i).position.y + 39);
+                if(Tools.collide(r1p1, r1p2, TankManager.tanks.get(i).position, r2p2)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public void fire() {

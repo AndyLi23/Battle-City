@@ -21,7 +21,6 @@ public class GameScreen implements Screen {
     private final Game game;
     private final SpriteBatch batch;
     private final ShapeRenderer renderer;
-    private Player player;
     private int map;
     private BufferedReader br;
     private String arr[];
@@ -40,8 +39,6 @@ public class GameScreen implements Screen {
         this.stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()), batch);
         arr = new String[19];
 
-        player = new Player(new Vector2(0, 0));
-
         try {
             br = new BufferedReader(new FileReader(Gdx.files.internal("maps/" + this.map + ".txt").file()));
 
@@ -56,6 +53,10 @@ public class GameScreen implements Screen {
         blockManager = new BlockManager(arr);
         tankManager = new TankManager();
 
+        tankManager.addTank(0);
+
+        tankManager.addTank(new Player(new Vector2(0, 0)));
+
 
     }
 
@@ -69,7 +70,7 @@ public class GameScreen implements Screen {
 
         blockManager.updateGround(batch);
         tankManager.updateBullets(batch);
-        player.update(batch);
+        tankManager.updateTanks(batch);
         blockManager.update(batch);
     }
 
