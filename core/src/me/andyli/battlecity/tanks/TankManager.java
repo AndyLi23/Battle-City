@@ -28,7 +28,7 @@ public class TankManager {
 
     public void addTank(int type) {
         if(type == 0) {
-            tanks.add(new Tank(new Vector2(0, 500), 2, 0, new Sprite(new Texture(Gdx.files.internal("img/tank1.png"))), 20, 1));
+            tanks.add(new Tank(new Vector2(0, 500), 2, 2, new Sprite(new Texture(Gdx.files.internal("img/tank1.png"))), 50, 1));
         }
     }
 

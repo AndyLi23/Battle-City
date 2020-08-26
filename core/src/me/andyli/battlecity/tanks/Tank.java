@@ -29,39 +29,44 @@ public class Tank {
 
     public void update(SpriteBatch batch) {
 
-        if(cooldown != 0) {
-            cooldown--;
+        if(health == 0) {
+            TankManager.tanks.removeValue(this, true);
+        } else {
+
+            if (cooldown != 0) {
+                cooldown--;
+            }
+
+            takeInput();
+
+            updateVel();
+
+            position.add(vel);
+
+            if (collideTank() || (collide(direction) != null && !(collide(direction) instanceof Ice))) {
+                position.sub(vel);
+            }
+
+            if (position.x < 0) {
+                position.x = 0;
+            }
+            if (position.x > 585) {
+                position.x = 585;
+            }
+            if (position.y < 0) {
+                position.y = 0;
+            }
+            if (position.y > 585) {
+                position.y = 585;
+            }
+
+            base.setPosition(position.x, position.y);
+            base.rotate(direction * 90 - base.getRotation());
+
+            batch.begin();
+            base.draw(batch);
+            batch.end();
         }
-
-        takeInput();
-
-        updateVel();
-
-        position.add(vel);
-
-        if(collideTank() || (collide(direction) != null && !(collide(direction) instanceof Ice))) {
-            position.sub(vel);
-        }
-
-        if(position.x < 0) {
-            position.x = 0;
-        }
-        if(position.x > 585) {
-            position.x = 585;
-        }
-        if(position.y < 0) {
-            position.y = 0;
-        }
-        if(position.y > 585) {
-            position.y = 585;
-        }
-
-        base.setPosition(position.x, position.y);
-        base.rotate(direction*90-base.getRotation());
-
-        batch.begin();
-        base.draw(batch);
-        batch.end();
     }
 
     public void updateVel() {
@@ -154,13 +159,13 @@ public class Tank {
             } else {
                 temp = new Vector2(10, 0);
             }
-            Bullet b = new Bullet(new Vector2(position.x + 17, position.y + 17), temp, direction);
+            Bullet b = new Bullet(new Vector2(position.x + 17, position.y + 17), temp, direction, this);
             TankManager.bullets.add(b);
             cooldown = cd;
         }
     }
 
     public void takeInput() {
-
+        fire();
     }
 }
