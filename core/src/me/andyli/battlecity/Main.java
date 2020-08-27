@@ -14,7 +14,7 @@ public class Main extends Game {
 
 		game = this;
 
-		setScreen(new GameScreen(game, 1));
+		setScreen(new GameScreen(game, 1, 3));
 	}
 
 	@Override

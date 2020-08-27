@@ -8,7 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class Constants {
 
-    public static final BitmapFont FONT = Tools.renderFont("font/Abel-Regular.ttf", 30);
+    public static final BitmapFont FONT = Tools.renderFont("font/Anonymous_Pro_B.ttf", 35, true);
+    public static final BitmapFont FONT_LARGE = Tools.renderFont("font/Anonymous_Pro_B.ttf", 80, true);
     public static final BitmapFont FONT_MEDIUM = Tools.renderFont("font/Abel-Regular.ttf", 25);
     public static final BitmapFont FONT_SMALL = Tools.renderFont("font/Abel-Regular.ttf", 20);
     public static final TextureAtlas ATLAS = new TextureAtlas(Gdx.files.internal("skin/ui-gray.atlas"));

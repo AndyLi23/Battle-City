@@ -17,7 +17,7 @@ public class Tools {
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = size;
         if(bold.length > 0) {
-            parameter.borderWidth = 2;
+            parameter.borderWidth = 0.7f;
         }
         BitmapFont fnt = generator.generateFont(parameter);
         generator.dispose();

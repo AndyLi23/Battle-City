@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import me.andyli.battlecity.blocks.Block;
 import me.andyli.battlecity.blocks.BlockManager;
 import me.andyli.battlecity.blocks.Ice;
+import me.andyli.battlecity.screens.GameScreen;
 import me.andyli.battlecity.utility.Tools;
 
 public class Tank {
@@ -45,7 +46,8 @@ public class Tank {
             TankManager.explosions.add(new Explosion(new Vector2(position.x + base.getWidth()/2, position.y + base.getHeight()/2), 2f, 0.2f));
             TankManager.tanks.removeValue(this, true);
             if(this instanceof Player) {
-                TankManager.addTank(new Player(new Vector2(0, 0)));
+                GameScreen.lives--;
+                TankManager.addTank(new Player(new Vector2(5, 5)));
             }
         } else {
 

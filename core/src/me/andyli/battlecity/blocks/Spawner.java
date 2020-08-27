@@ -59,13 +59,13 @@ public class Spawner extends Block {
                     if (Tools.choose(300)) {
                         GameScreen.left--;
                         spawning = true;
-                        counter = 100;
+                        counter = 80;
                     }
                 }
                 if (Tools.choose(1000)) {
                     GameScreen.left--;
                     spawning = true;
-                    counter = 100;
+                    counter = 80;
                 }
             }
         }
@@ -80,6 +80,6 @@ public class Spawner extends Block {
 
     public void spawn() {
         spawning = true;
-        counter = 100;
+        counter = 80;
     }
 }
