@@ -25,7 +25,6 @@ public class BlockManager {
                     BlockManager.arr[i][j] = new Flag(new Vector2(j*48, (12-i)*48), i, j);
                 } else if(arr[i].charAt(j) == 'S') {
                     BlockManager.arr[i][j] = new Spawner(new Vector2(j*48, (12-i)*48), i, j);
-                    ((Spawner) BlockManager.arr[i][j]).spawn();
                 }
             }
         }

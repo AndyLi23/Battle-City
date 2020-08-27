@@ -18,16 +18,17 @@ public class Spawner extends Block {
     private Sprite base;
     private boolean spawning = false;
     private int counter;
+    private Vector2 pos;
     private int[] list;
 
     public Spawner(Vector2 position, int i, int j) {
         super(position, i, j);
         if(j == 0) {
-            list = new int[]{2};
+            list = new int[]{2, 3};
         } else if (j == 12) {
-            list = new int[]{1, 2,1};
-        } else {
             list = new int[]{1, 2};
+        } else {
+            list = new int[]{1, 2, 3};
         }
 
         base = new Sprite(new Texture(Gdx.files.internal("img/spawner.png")));
@@ -38,7 +39,13 @@ public class Spawner extends Block {
         if(spawning) {
             counter--;
             if (counter == 0) {
-                GameScreen.tankManager.addTank(Tools.selectRandom(new int[]{0, 1}), new Vector2(position.x, position.y), Tools.selectRandom(list));
+                int dir = Tools.selectRandom(list);
+                if(dir == 3) {
+                    pos = new Vector2(position.x+9, position.y);
+                } else {
+                    pos = new Vector2(position.x, position.y);
+                }
+                GameScreen.tankManager.addTank(Tools.selectRandom(new int[]{0, 1, 2}), pos, dir);
                 spawning = false;
             } else if((counter/10)%2 == 0) {
                 base.setTexture(new Texture(Gdx.files.internal("img/spawner1.png")));
@@ -47,9 +54,19 @@ public class Spawner extends Block {
             }
         } else {
             base.setTexture(new Texture(Gdx.files.internal("img/spawner.png")));
-            if(Tools.choose(500)) {
-                spawning = true;
-                counter = 100;
+            if(GameScreen.left > 0) {
+                if (TankManager.tanks.size == 1) {
+                    if (Tools.choose(300)) {
+                        GameScreen.left--;
+                        spawning = true;
+                        counter = 100;
+                    }
+                }
+                if (Tools.choose(1000)) {
+                    GameScreen.left--;
+                    spawning = true;
+                    counter = 100;
+                }
             }
         }
         batch.begin();

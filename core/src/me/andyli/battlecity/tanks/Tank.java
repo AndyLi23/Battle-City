@@ -1,24 +1,24 @@
 package me.andyli.battlecity.tanks;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import me.andyli.battlecity.blocks.Block;
 import me.andyli.battlecity.blocks.BlockManager;
 import me.andyli.battlecity.blocks.Ice;
-import me.andyli.battlecity.blocks.Spawner;
-import me.andyli.battlecity.screens.GameScreen;
 import me.andyli.battlecity.utility.Tools;
 
 public class Tank {
-    public int speed, direction, cooldown, cd, health;
+    public int direction, cooldown, cd, health;
+    public float speed;
     public Vector2 position, vel;
     public Sprite base;
     private int[] list;
     private int countdown;
 
-    public Tank(Vector2 position, int speed, int direction, Sprite base, int cd, int health) {
+    public Tank(Vector2 position, float speed, int direction, Sprite base, int cd, int health) {
         this.position = position;
         this.speed = speed;
         this.direction = direction;
@@ -36,6 +36,7 @@ public class Tank {
     }
 
     public void update(SpriteBatch batch) {
+
         if(countdown > 0) {
             countdown--;
         }
@@ -47,6 +48,10 @@ public class Tank {
                 TankManager.addTank(new Player(new Vector2(0, 0)));
             }
         } else {
+
+            if(speed == 0.8f) {
+                base.setTexture(new Texture(Gdx.files.internal("img/tank3"+health+".png")));
+            }
 
             if (cooldown != 0) {
                 cooldown--;

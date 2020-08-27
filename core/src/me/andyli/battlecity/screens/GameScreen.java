@@ -54,9 +54,9 @@ public class GameScreen implements Screen {
         blockManager = new BlockManager(arr);
         tankManager = new TankManager();
 
-        tankManager.addTank(new Player(new Vector2(0, 0)));
+        TankManager.addTank(new Player(new Vector2(0, 0)));
 
-        left = 17;
+        left = 30;
 
 
     }
@@ -74,6 +74,11 @@ public class GameScreen implements Screen {
         tankManager.updateTanks(batch);
         blockManager.update(batch);
         tankManager.updateExplosions(batch);
+
+        if(left == 0 && TankManager.tanks.size == 1) {
+
+            //gameOver();
+        }
     }
 
     public static void gameOver() {
