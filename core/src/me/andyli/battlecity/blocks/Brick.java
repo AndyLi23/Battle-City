@@ -16,7 +16,11 @@ public class Brick extends Block {
 
         for(int i = 0; i < 4; ++i) {
             for(int j = 0; j < 4; ++j) {
-                sprites[i][j] = new Sprite(new Texture(Gdx.files.internal("img/brick.png")));
+                if((i % 2 == 0 && j % 2 == 0)||(i % 2 == 1 && j % 2 == 1)) {
+                    sprites[i][j] = new Sprite(new Texture(Gdx.files.internal("img/brick1.png")));
+                } else {
+                    sprites[i][j] = new Sprite(new Texture(Gdx.files.internal("img/brick2.png")));
+                }
                 sprites[i][j].setPosition(position.x + i*12, position.y + j*12);
             }
         }

@@ -41,9 +41,10 @@ public class Tank {
         }
 
         if(health == 0) {
+            TankManager.explosions.add(new Explosion(new Vector2(position.x + base.getWidth()/2, position.y + base.getHeight()/2), 2f, 0.2f));
             TankManager.tanks.removeValue(this, true);
             if(this instanceof Player) {
-                GameScreen.gameOver();
+                TankManager.addTank(new Player(new Vector2(0, 0)));
             }
         } else {
 
@@ -57,7 +58,7 @@ public class Tank {
 
             position.add(vel);
 
-            if ((countdown == 0 || (this instanceof Player)) && ((collideTank() && this instanceof Player) || (collide(direction) != null && !(collide(direction) instanceof Ice)))) {
+            if ((collideTank() || (collide(direction) != null && !(collide(direction) instanceof Ice)))) {
                 position.sub(vel);
             }
 
@@ -173,7 +174,7 @@ public class Tank {
             } else {
                 temp = new Vector2(10, 0);
             }
-            Bullet b = new Bullet(new Vector2(position.x + 18, position.y + 17), temp, direction, this);
+            Bullet b = new Bullet(new Vector2(position.x + 15, position.y + 13), temp, direction, this);
             TankManager.bullets.add(b);
             cooldown = cd;
         }
@@ -185,7 +186,7 @@ public class Tank {
                 direction = Tools.selectRandom(list);
             }
 
-            if (Tools.choose(4)) {
+            if (Tools.choose(10)) {
                 fire();
             }
         }

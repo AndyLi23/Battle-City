@@ -34,7 +34,7 @@ public class Flag extends Block {
         health--;
         if(health == 0) {
             BlockManager.arr[x][y] = null;
-            GameScreen.gameOver();
+            //GameScreen.gameOver();
         }
         return Tools.collide(r1p1, r1p2, position, position2);
     }

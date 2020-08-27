@@ -73,6 +73,7 @@ public class GameScreen implements Screen {
         tankManager.updateBullets(batch);
         tankManager.updateTanks(batch);
         blockManager.update(batch);
+        tankManager.updateExplosions(batch);
     }
 
     public static void gameOver() {

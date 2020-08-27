@@ -5,23 +5,58 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import me.andyli.battlecity.utility.Tools;
 
 public class Iron extends Block {
 
-    private Sprite base;
+    private Sprite[][] sprites;
 
-    public Iron(Vector2 position, int i, int j) {
-        super(position, i, j);
+    public Iron(Vector2 position, int x, int y) {
+        super(position, x, y);
 
-        base = new Sprite(new Texture(Gdx.files.internal("img/iron.png")));
-        base.setPosition(position.x, position.y);
+        sprites = new Sprite[2][2];
+
+        for(int i = 0; i < 2; ++i) {
+            for(int j = 0; j < 2; ++j) {
+                sprites[i][j] = new Sprite(new Texture(Gdx.files.internal("img/iron.png")));
+                sprites[i][j].setPosition(position.x + i*24, position.y + j*24);
+            }
+        }
 
     }
 
     public void update(SpriteBatch batch) {
         batch.begin();
-        base.draw(batch);
+        for(int i = 0; i < 2; ++i) {
+            for(int j = 0; j < 2; ++j) {
+                if(sprites[i][j] != null) {
+                    sprites[i][j].draw(batch);
+                }
+            }
+        }
         batch.end();
+    }
+
+    public boolean collideTank(Vector2 r1p1, Vector2 r1p2) {
+        for(int i = 0; i < 2; ++i) {
+            for (int j = 0; j < 2; ++j) {
+                if(sprites[i][j] != null && Tools.collide(r1p1, r1p2, new Vector2(position.x + i*24, position.y + j*24), new Vector2(position.x + i*24+24, position.y + j*24+24))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean collideBullet(Vector2 r1p1, Vector2 r1p2, int direction) {
+        for(int i = 0; i < 2; ++i) {
+            for (int j = 0; j < 2; ++j) {
+                if(sprites[i][j] != null && Tools.collide(r1p1, r1p2, new Vector2(position.x + i*24, position.y + j*24), new Vector2(position.x + i*24+24, position.y + j*24+24))) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }
