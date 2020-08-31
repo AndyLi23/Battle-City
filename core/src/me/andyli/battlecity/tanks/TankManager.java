@@ -44,11 +44,11 @@ public class TankManager {
 
     public void addTank(int type, Vector2 position, int direction) {
         if(type == 0) {
-            tanks.add(new Tank(position, 1.5f, direction, new Sprite(new Texture(Gdx.files.internal("img/tank2.png"))), 50, 1));
+            tanks.add(new Tank(position, 1.5f, direction, new Sprite(new Texture(Gdx.files.internal("img/tank2.png"))), 50, 1, type));
         } else if(type == 1) {
-            tanks.add(new Tank(position, 0.8f, direction, new Sprite(new Texture(Gdx.files.internal("img/tank34.png"))), 50, 4));
+            tanks.add(new Tank(position, 0.8f, direction, new Sprite(new Texture(Gdx.files.internal("img/tank34.png"))), 50, 4, type));
         } else if(type == 2) {
-            tanks.add(new Tank(position, 2.5f, direction, new Sprite(new Texture(Gdx.files.internal("img/tank4.png"))), 40, 1));
+            tanks.add(new Tank(position, 2.5f, direction, new Sprite(new Texture(Gdx.files.internal("img/tank4.png"))), 40, 1, type));
         }
     }
 

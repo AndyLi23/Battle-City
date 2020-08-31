@@ -50,6 +50,7 @@ public class WinScreen implements Screen {
         tStyle.font = Constants.FONT;
         tStyle.up = Constants.SKIN.getDrawable("button_03");
         tStyle.down = Constants.SKIN.getDrawable("button_02");
+        tStyle.fontColor = Color.BLACK;
 
         playagain = new TextButton(" Play Again ", tStyle);
         playagain.setPosition(400-playagain.getWidth()/2, 300);
@@ -58,7 +59,7 @@ public class WinScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 dispose();
-                game.setScreen(new GameScreen(game, 1, 30));
+                game.setScreen(new GameScreen(game, 1, 30, 0, 0));
             }
         });
 

@@ -14,22 +14,21 @@ import me.andyli.battlecity.screens.GameScreen;
 import me.andyli.battlecity.utility.Tools;
 
 public class Tank {
-    public int direction, cooldown, cd, health;
+    public int direction, cooldown, cd, health, invulnerable, type, countdown;
     public float speed;
     public Vector2 position, vel;
     public Sprite base;
     private int[] list;
-    private int countdown;
-    public int invulnerable;
     public boolean powerup;
 
-    public Tank(Vector2 position, float speed, int direction, Sprite base, int cd, int health) {
+    public Tank(Vector2 position, float speed, int direction, Sprite base, int cd, int health, int type) {
         this.position = position;
         this.speed = speed;
         this.direction = direction;
         this.vel = new Vector2(0, 0);
         updateVel();
         this.cd = cd;
+        this.type = type;
 
         this.health = health;
 
@@ -62,13 +61,15 @@ public class Tank {
             if(this instanceof Player) {
                 GameScreen.lives--;
                 TankManager.addTank(new Player(new Vector2(5, 5)));
+            } else {
+                GameScreen.scores[type]++;
             }
             if(powerup) {
                 BlockManager.addPowerup(new Powerup(new Vector2(Tools.random(585),Tools.random(585)), Tools.random(2)));
             }
         } else {
 
-            if(speed == 0.8f) {
+            if(type == 1) {
                 base.setTexture(new Texture(Gdx.files.internal("img/tank3"+health+".png")));
                 if(powerup) {
                     base.setColor(new Color(1, 0.6f, 0.6f, 1));

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import me.andyli.battlecity.blocks.BlockManager;
+import me.andyli.battlecity.screens.GameScreen;
 import me.andyli.battlecity.utility.Tools;
 
 public class Bullet {

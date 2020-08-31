@@ -10,7 +10,7 @@ import me.andyli.battlecity.blocks.Ice;
 public class Player extends Tank{
 
     public Player(Vector2 position) {
-        super(position, 2, 0, new Sprite(new Texture(Gdx.files.internal("img/tank1.png"))), 25, 1);
+        super(position, 2, 0, new Sprite(new Texture(Gdx.files.internal("img/tank1.png"))), 25, 1, -1);
         invulnerable = 100;
     }
 
