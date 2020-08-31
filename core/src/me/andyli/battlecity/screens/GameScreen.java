@@ -7,9 +7,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -33,7 +33,7 @@ public class GameScreen implements Screen {
     private String arr[];
     public BlockManager blockManager;
     public static TankManager tankManager;
-    public static int left;
+    public static int left, left2;
     public static Sprite[] leftVisual;
     public static int lives;
     private Label l1, l2, l3;
@@ -57,7 +57,7 @@ public class GameScreen implements Screen {
         arr = new String[19];
 
         try {
-            br = new BufferedReader(new FileReader(Gdx.files.internal("maps/" + this.map + ".txt").file()));
+            br = new BufferedReader(new FileReader(Gdx.files.internal("maps/" + GameScreen.map + ".txt").file()));
 
             for(int i = 0; i < 13; ++i) {
                 arr[i] = br.readLine();
@@ -72,7 +72,7 @@ public class GameScreen implements Screen {
 
         TankManager.addTank(new Player(new Vector2(5, 5)));
 
-        left = 20;
+        left = left2 = 3;
         GameScreen.lives = lives;
 
         leftVisual = new Sprite[left];
@@ -86,16 +86,16 @@ public class GameScreen implements Screen {
             leftVisual[i].setPosition(700, 300+(i-(left/2))*23);
         }
 
-        l1 = new Label("I P", lStyle);
+        l1 = new Label("IP", lStyle);
         l1.setAlignment(Align.left);
         l2 = new Label(" 3", lStyle);
         l2.setAlignment(Align.left);
-        l3 = new Label("Level "+map, lStyle);
+        l3 = new Label("Lvl"+map, lStyle);
         l3.setAlignment(Align.left);
 
-        l1.setPosition(650, 220);
-        l2.setPosition(650, 190);
-        l3.setPosition(650, 100);
+        l1.setPosition(670, 220);
+        l2.setPosition(670, 190);
+        l3.setPosition(670, 100);
 
         stage.addActor(l1);
         stage.addActor(l2);
@@ -117,14 +117,15 @@ public class GameScreen implements Screen {
         tankManager.updateTanks(batch);
         blockManager.update(batch);
         tankManager.updateExplosions(batch);
+        blockManager.updatePowerups(batch);
 
         batch.begin();
-        for(int i = 0; i < left; ++i) {
+        for(int i = 0; i < left2; ++i) {
             leftVisual[i].draw(batch);
         }
         batch.end();
 
-        if(left == 0 && TankManager.tanks.size == 1) {
+        if(left2 == 0 && TankManager.tanks.size == 1 && !BlockManager.spawning()) {
             nextLevel();
         }
 
@@ -143,6 +144,7 @@ public class GameScreen implements Screen {
         TankManager.bullets.clear();
         TankManager.explosions.clear();
         BlockManager.arr = new Block[13][13];
+        BlockManager.powerups.clear();
         game.setScreen(new GameOverScreen(game));
     }
 
@@ -151,7 +153,12 @@ public class GameScreen implements Screen {
         TankManager.bullets.clear();
         TankManager.explosions.clear();
         BlockManager.arr = new Block[13][13];
-        game.setScreen(new GameScreen(game, map+1, lives));
+        BlockManager.powerups.clear();
+        if(GameScreen.map == 2) {
+            game.setScreen(new WinScreen(game));
+        } else {
+            game.setScreen(new GameScreen(game, map + 1, lives));
+        }
     }
 
 

@@ -6,18 +6,14 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import me.andyli.battlecity.screens.GameScreen;
-import me.andyli.battlecity.tanks.Player;
-import me.andyli.battlecity.tanks.Tank;
 import me.andyli.battlecity.tanks.TankManager;
 import me.andyli.battlecity.utility.Tools;
-
-import java.util.Random;
 
 public class Spawner extends Block {
 
     private Sprite base;
     private boolean spawning = false;
-    private int counter;
+    public int counter;
     private Vector2 pos;
     private int[] list;
 
@@ -39,6 +35,7 @@ public class Spawner extends Block {
         if(spawning) {
             counter--;
             if (counter == 0) {
+                GameScreen.left2--;
                 int dir = Tools.selectRandom(list);
                 if(dir == 3) {
                     pos = new Vector2(position.x+9, position.y);

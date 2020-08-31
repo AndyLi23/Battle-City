@@ -11,9 +11,21 @@ public class Player extends Tank{
 
     public Player(Vector2 position) {
         super(position, 2, 0, new Sprite(new Texture(Gdx.files.internal("img/tank1.png"))), 25, 1);
+        invulnerable = 100;
     }
 
     public void takeInput() {
+        if(invulnerable > 0) {
+            if(invulnerable/10 % 2 == 0) {
+                base.setTexture(new Texture(Gdx.files.internal("img/inv1.png")));
+            } else {
+                base.setTexture(new Texture(Gdx.files.internal("img/inv2.png")));
+            }
+        } else {
+            base.setTexture(new Texture(Gdx.files.internal("img/tank1.png")));
+        }
+
+
         if(Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
             direction = 0;
             vel.x = 0;

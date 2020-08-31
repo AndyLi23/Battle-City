@@ -5,11 +5,13 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Timer;
 
 import java.util.Random;
 
 public class Tools {
-
+    public static Timer timer = new Timer();
+    public static Random rand = new Random();
 
     public static BitmapFont renderFont(String fontfile, int size, boolean... bold) {
         FileHandle fontFile = Gdx.files.internal(fontfile);
@@ -32,13 +34,15 @@ public class Tools {
     }
 
     public static int selectRandom(int[] list) {
-        Random rand = new Random();
         return list[rand.nextInt(list.length)];
     }
 
     public static boolean choose(int num) {
-        Random rand = new Random();
         return 0 == rand.nextInt(num);
+    }
+
+    public static int random(int limit) {
+        return rand.nextInt(limit);
     }
 
 }

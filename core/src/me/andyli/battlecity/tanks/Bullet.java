@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.sun.scenario.effect.impl.sw.java.JSWBlend_MULTIPLYPeer;
 import me.andyli.battlecity.blocks.BlockManager;
 import me.andyli.battlecity.utility.Tools;
 
@@ -63,7 +62,9 @@ public class Bullet {
                 if(Tools.collide(r1p1, r1p2, t.position, r2p2)) {
                     if(t instanceof Player || parent instanceof Player) {
                         TankManager.explosions.add(new Explosion(new Vector2(position.x + base.getWidth()/2, position.y + base.getHeight()/2), 1.5f, 0.3f));
-                        t.health--;
+                        if(t.invulnerable == 0) {
+                            t.health--;
+                        }
                     }
                     return true;
                 }

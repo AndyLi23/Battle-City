@@ -1,6 +1,7 @@
 package me.andyli.battlecity.tanks;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import me.andyli.battlecity.blocks.Block;
 import me.andyli.battlecity.blocks.BlockManager;
 import me.andyli.battlecity.blocks.Ice;
+import me.andyli.battlecity.blocks.Powerup;
 import me.andyli.battlecity.screens.GameScreen;
 import me.andyli.battlecity.utility.Tools;
 
@@ -18,6 +20,8 @@ public class Tank {
     public Sprite base;
     private int[] list;
     private int countdown;
+    public int invulnerable;
+    public boolean powerup;
 
     public Tank(Vector2 position, float speed, int direction, Sprite base, int cd, int health) {
         this.position = position;
@@ -34,9 +38,19 @@ public class Tank {
         this.base = base;
         base.setPosition(position.x, position.y);
         countdown = 40;
+        invulnerable = 0;
+
+        if(!(this instanceof Player) && Tools.choose(4)) {
+            powerup = true;
+            base.setColor(new Color(1, 0.6f, 0.6f, 1));
+        }
     }
 
     public void update(SpriteBatch batch) {
+
+        if(invulnerable > 0) {
+            invulnerable--;
+        }
 
         if(countdown > 0) {
             countdown--;
@@ -49,13 +63,20 @@ public class Tank {
                 GameScreen.lives--;
                 TankManager.addTank(new Player(new Vector2(5, 5)));
             }
+            if(powerup) {
+                BlockManager.addPowerup(new Powerup(new Vector2(Tools.random(585),Tools.random(585)), Tools.random(2)));
+            }
         } else {
 
             if(speed == 0.8f) {
                 base.setTexture(new Texture(Gdx.files.internal("img/tank3"+health+".png")));
+                if(powerup) {
+                    base.setColor(new Color(1, 0.6f, 0.6f, 1));
+                }
             }
 
-            if (cooldown != 0) {
+
+            if (cooldown > 0) {
                 cooldown--;
             }
 
@@ -64,6 +85,10 @@ public class Tank {
             updateVel();
 
             position.add(vel);
+
+            if(this instanceof Player) {
+                collidePowerup();
+            }
 
             if ((collideTank() || (collide(direction) != null && !(collide(direction) instanceof Ice)))) {
                 position.sub(vel);
@@ -152,6 +177,24 @@ public class Tank {
 
 
         return null;
+    }
+
+    public void collidePowerup() {
+        Vector2 r1p1 = new Vector2(position.x, position.y);
+        Vector2 r1p2 = new Vector2(position.x+39, position.y+39);
+
+        for(Powerup p : BlockManager.powerups) {
+            if(p.collideTank(r1p1, r1p2)) {
+                if(p.type == 1) {
+                    GameScreen.lives++;
+                } else if (p.type == 0) {
+                    invulnerable += 500;
+                } else {
+                    BlockManager.changeToIron();
+                }
+                BlockManager.powerups.removeValue(p, true);
+            }
+        }
     }
 
     public boolean collideTank() {

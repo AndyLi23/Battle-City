@@ -14,8 +14,27 @@ public class Brick extends Block {
 
         sprites = new Sprite[4][4];
 
-        for(int i = 0; i < 4; ++i) {
-            for(int j = 0; j < 4; ++j) {
+        int i1 = 0;
+        int j1 = 0;
+        int i2 = 4;
+        int j2 = 4;
+
+        if(half == 1 || half == 5|| half == 8) {
+            i1 = 2;
+        }
+        if (half == 3 || half == 6|| half == 7) {
+            i2 = 2;
+        }
+        if (half == 2 || half == 7|| half == 8) {
+            j1 = 2;
+        }
+        if (half == 4 || half == 5 || half == 6) {
+            j2 = 2;
+        }
+
+
+        for(int i = i1; i < i2; ++i) {
+            for(int j = j1; j < j2; ++j) {
                 if((i % 2 == 0 && j % 2 == 0)||(i % 2 == 1 && j % 2 == 1)) {
                     sprites[i][j] = new Sprite(new Texture(Gdx.files.internal("img/brick1.png")));
                 } else {

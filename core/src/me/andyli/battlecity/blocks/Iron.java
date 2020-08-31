@@ -11,7 +11,7 @@ public class Iron extends Block {
 
     private Sprite[][] sprites;
 
-    public Iron(Vector2 position, int x, int y) {
+    public Iron(Vector2 position, int x, int y, String direction) {
         super(position, x, y);
 
         sprites = new Sprite[2][2];
@@ -21,6 +21,22 @@ public class Iron extends Block {
                 sprites[i][j] = new Sprite(new Texture(Gdx.files.internal("img/iron.png")));
                 sprites[i][j].setPosition(position.x + i*24, position.y + j*24);
             }
+        }
+
+        if(direction.equals("[") || direction.equals("/") || direction.equals("!") || direction.equals("#") || direction.equals("@")) {
+            sprites[0][0] = null;
+        }
+
+        if(direction.equals("]") || direction.equals("/") || direction.equals("!") || direction.equals("$") || direction.equals("@")) {
+            sprites[0][1] = null;
+        }
+
+        if(direction.equals("[") || direction.equals("\\") || direction.equals("!") || direction.equals("$") || direction.equals("#")) {
+            sprites[1][0] = null;
+        }
+
+        if(direction.equals("]") || direction.equals("\\") || direction.equals("$") || direction.equals("#") || direction.equals("@")) {
+            sprites[1][1] = null;
         }
 
     }

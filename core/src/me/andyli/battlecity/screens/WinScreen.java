@@ -15,7 +15,8 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import me.andyli.battlecity.Constants;
 
-public class GameOverScreen implements Screen {
+
+public class WinScreen implements Screen {
 
     private final Stage stage;
     private final Game game;
@@ -25,7 +26,7 @@ public class GameOverScreen implements Screen {
     private TextButton playagain;
 
 
-    public GameOverScreen(final Game game) {
+    public WinScreen(final Game game) {
 
         renderer = new ShapeRenderer();
 
@@ -41,7 +42,7 @@ public class GameOverScreen implements Screen {
         lStyle.font = Constants.FONT_LARGE;
         lStyle.fontColor = Color.RED;
 
-        l1 = new Label("GAME OVER", lStyle);
+        l1 = new Label("You Won!", lStyle);
         l1.setAlignment(Align.center);
         l1.setPosition(400-l1.getWidth()/2, 500);
 
