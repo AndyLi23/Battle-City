@@ -4,6 +4,8 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -26,6 +28,7 @@ public class PointsScreen implements Screen {
     private final SpriteBatch batch;
     private final ShapeRenderer renderer;
     private Label l1, l2, t1, t2, t3, t1a, t2a, t3a, tt, tta, ttt, t, ot, ttta;
+    private Sprite t1s, t2s, t3s;
     private TextButton playagain;
 
 
@@ -71,9 +74,9 @@ public class PointsScreen implements Screen {
         }
 
         l1.setAlignment(Align.center);
-        l1.setPosition(400-l1.getWidth()/2, 500);
+        l1.setPosition(400-l1.getWidth()/2, 520);
 
-        l2.setPosition(400-l2.getWidth()/2, 465);
+        l2.setPosition(400-l2.getWidth()/2, 485);
 
         TextButton.TextButtonStyle tStyle = new TextButton.TextButtonStyle();
         tStyle.font = Constants.FONT;
@@ -83,51 +86,61 @@ public class PointsScreen implements Screen {
 
         t1 = new Label(scores[0]+"", l2Style);
         t1.setAlignment(Align.left);
-        t1.setPosition(200, 400);
+        t1.setPosition(300, 400);
 
         t2 = new Label(scores[1]+"", l2Style);
         t2.setAlignment(Align.left);
-        t2.setPosition(200, 350);
+        t2.setPosition(300, 350);
 
         t3 = new Label(scores[2]+"", l2Style);
         t3.setAlignment(Align.left);
-        t3.setPosition(200, 300);
+        t3.setPosition(300, 300);
 
         tt = new Label(scores[2]+scores[1]+scores[0]+"", l2Style);
         tt.setAlignment(Align.left);
-        tt.setPosition(200, 240);
+        tt.setPosition(300, 240);
 
         ttta = new Label(scores[2]+scores[1]+scores[0]+total1+"", l2Style);
         ttta.setAlignment(Align.right);
-        ttta.setPosition(200, 190);
+        ttta.setPosition(300, 190);
 
         ot = new Label("Total", l2Style);
         ot.setAlignment(Align.left);
-        ot.setPosition(80, 240);
+        ot.setPosition(170, 240);
 
         t = new Label("Game", l2Style);
         t.setAlignment(Align.left);
-        t.setPosition(80, 190);
+        t.setPosition(170, 190);
 
         t1a = new Label(scores[0]*100+"", l2Style);
         t1a.setAlignment(Align.right);
-        t1a.setPosition(600-t1a.getWidth(), 400);
+        t1a.setPosition(520-t1a.getWidth(), 400);
 
         t2a = new Label(scores[1]*500+"", l2Style);
         t2a.setAlignment(Align.right);
-        t2a.setPosition(600-t2a.getWidth(), 350);
+        t2a.setPosition(520-t2a.getWidth(), 350);
 
         t3a = new Label(scores[2]*300+"", l2Style);
         t3a.setAlignment(Align.right);
-        t3a.setPosition(600-t3a.getWidth(), 300);
+        t3a.setPosition(520-t3a.getWidth(), 300);
 
         tta = new Label(scores[2]*300+scores[1]*500+scores[0]*100+"", l2Style);
         tta.setAlignment(Align.right);
-        tta.setPosition(600-tta.getWidth(), 240);
+        tta.setPosition(520-tta.getWidth(), 240);
 
         ttt = new Label(scores[2]*300+scores[1]*500+scores[0]*100+total+"", l2Style);
         ttt.setAlignment(Align.right);
-        ttt.setPosition(600-ttt.getWidth(), 190);
+        ttt.setPosition(520-ttt.getWidth(), 190);
+
+
+        t1s = new Sprite(new Texture(Gdx.files.internal("img/tank2.png")));
+        t1s.setCenter(400, 415);
+
+        t2s = new Sprite(new Texture(Gdx.files.internal("img/tank34.png")));
+        t2s.setCenter(400, 365);
+
+        t3s = new Sprite(new Texture(Gdx.files.internal("img/tank4.png")));
+        t3s.setCenter(400, 315);
 
         if(win || lose) {
             playagain = new TextButton(" Play Again ", tStyle);
@@ -165,9 +178,15 @@ public class PointsScreen implements Screen {
         renderer.rect(0, 0, 800, 624);
 
         renderer.setColor(Color.WHITE);
-        renderer.rect(170, 280, 460, 2);
+        renderer.rect(270, 280, 280, 2);
 
         renderer.end();
+
+        batch.begin();
+        t1s.draw(batch);
+        t2s.draw(batch);
+        t3s.draw(batch);
+        batch.end();
 
 
         stage.act(delta);

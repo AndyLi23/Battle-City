@@ -18,7 +18,7 @@ public class Powerup extends Block{
 
         this.type = type;
 
-        left = Tools.random(500);
+        left = 300+ Tools.random(200);
 
         if(type == 0) {
             base = new Sprite(new Texture(Gdx.files.internal("img/helmet.png")));

@@ -12,12 +12,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import me.andyli.battlecity.Constants;
 import me.andyli.battlecity.blocks.Block;
 import me.andyli.battlecity.blocks.BlockManager;
 import me.andyli.battlecity.tanks.Player;
 import me.andyli.battlecity.tanks.TankManager;
+import me.andyli.battlecity.utility.Tools;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -39,6 +41,7 @@ public class GameScreen implements Screen {
     public static int lives, total, total1;
     private Label l1, l2, l3;
     public static int[] scores = new int[4];
+    public boolean ended;
 
 
     public GameScreen(final Game game, int map, int lives, int total, int total1) {
@@ -130,12 +133,16 @@ public class GameScreen implements Screen {
         }
         batch.end();
 
-        if(left2 == 0 && TankManager.tanks.size == 1 && !BlockManager.spawning()) {
-            nextLevel();
-        }
+        if(!ended) {
+            if (left2 == 0 && TankManager.tanks.size == 1 && !BlockManager.spawning()) {
+                nextLevel();
+                ended = true;
+            }
 
-        if(lives<=0) {
-            gameOver();
+            if (lives <= 0) {
+                gameOver();
+                ended = true;
+            }
         }
 
         l2.setText(lives+"");
@@ -145,29 +152,39 @@ public class GameScreen implements Screen {
     }
 
     public static void gameOver() {
-        TankManager.tanks.clear();
-        TankManager.bullets.clear();
-        TankManager.explosions.clear();
-        BlockManager.arr = new Block[13][13];
-        BlockManager.powerups.clear();
-        game.setScreen(new PointsScreen(game, scores, map, lives, false, true, total, total1));
-        GameScreen.scores = new int[4];
+        Tools.timer.scheduleTask(new Timer.Task() {
+            @Override
+            public void run() {
+                TankManager.tanks.clear();
+                TankManager.bullets.clear();
+                TankManager.explosions.clear();
+                BlockManager.arr = new Block[13][13];
+                BlockManager.powerups.clear();
+                game.setScreen(new PointsScreen(game, scores, map, lives, false, true, total, total1));
+                GameScreen.scores = new int[4];
+            }
+        }, 2f);
     }
 
     public static void nextLevel() {
-        TankManager.tanks.clear();
-        TankManager.bullets.clear();
-        TankManager.explosions.clear();
-        BlockManager.arr = new Block[13][13];
-        BlockManager.powerups.clear();
-        Gdx.app.log(total+"", "");
-        if(GameScreen.map == 2) {
-            game.setScreen(new PointsScreen(game, scores, map, lives, true, false, total, total1));
-        } else {
-            //game.setScreen(new GameScreen(game, map + 1, lives));
-            game.setScreen(new PointsScreen(game, scores, map, lives, false, false, total, total1));
-        }
-        GameScreen.scores = new int[4];
+        Tools.timer.scheduleTask(new Timer.Task() {
+             @Override
+             public void run() {
+                 TankManager.tanks.clear();
+                 TankManager.bullets.clear();
+                 TankManager.explosions.clear();
+                 BlockManager.arr = new Block[13][13];
+                 BlockManager.powerups.clear();
+                 Gdx.app.log(total+"", "");
+                 if(GameScreen.map == 2) {
+                     game.setScreen(new PointsScreen(game, scores, map, lives, true, false, total, total1));
+                 } else {
+                     //game.setScreen(new GameScreen(game, map + 1, lives));
+                     game.setScreen(new PointsScreen(game, scores, map, lives, false, false, total, total1));
+                 }
+                 GameScreen.scores = new int[4];
+             }
+         }, 2f);
     }
 
 
