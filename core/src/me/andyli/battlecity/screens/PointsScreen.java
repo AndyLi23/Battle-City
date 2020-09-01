@@ -25,7 +25,7 @@ public class PointsScreen implements Screen {
     private final Game game;
     private final SpriteBatch batch;
     private final ShapeRenderer renderer;
-    private Label l1, l2, t1, t2, t3, t1a, t2a, t3a, tt, tta, ttt, t, ot, ttta;
+    private Label l1, l2, t1, t2, t3, t1a, t2a, t3a, tt, tta, ttt, t, ot, ttta, b, ba;
     private Sprite t1s, t2s, t3s;
     private TextButton playagain, menu;
     private int players;
@@ -95,19 +95,23 @@ public class PointsScreen implements Screen {
 
         tt = new Label(scores[2]+scores[1]+scores[0]+"", l2Style);
         tt.setAlignment(Align.left);
-        tt.setPosition(300, 240);
+        tt.setPosition(300, 210);
 
         ttta = new Label(scores[2]+scores[1]+scores[0]+total1+"", l2Style);
         ttta.setAlignment(Align.right);
-        ttta.setPosition(300, 190);
+        ttta.setPosition(300, 180);
+
+        b = new Label("Bonus", l2Style);
+        b.setAlignment(Align.left);
+        b.setPosition(170, 240);
 
         ot = new Label("Total", l2Style);
         ot.setAlignment(Align.left);
-        ot.setPosition(170, 240);
+        ot.setPosition(170, 210);
 
         t = new Label("Game", l2Style);
         t.setAlignment(Align.left);
-        t.setPosition(170, 190);
+        t.setPosition(170, 180);
 
         t1a = new Label(scores[0]*100+"", l2Style);
         t1a.setAlignment(Align.right);
@@ -121,13 +125,17 @@ public class PointsScreen implements Screen {
         t3a.setAlignment(Align.right);
         t3a.setPosition(520-t3a.getWidth(), 300);
 
+        ba = new Label(scores[3]*500+"", l2Style);
+        ba.setAlignment(Align.right);
+        ba.setPosition(520-ba.getWidth(), 240);
+
         tta = new Label(scores[2]*300+scores[1]*500+scores[0]*100+"", l2Style);
         tta.setAlignment(Align.right);
-        tta.setPosition(520-tta.getWidth(), 240);
+        tta.setPosition(520-tta.getWidth(), 210);
 
         ttt = new Label(scores[2]*300+scores[1]*500+scores[0]*100+total+"", l2Style);
         ttt.setAlignment(Align.right);
-        ttt.setPosition(520-ttt.getWidth(), 190);
+        ttt.setPosition(520-ttt.getWidth(), 180);
 
 
         t1s = new Sprite(new Texture(Gdx.files.internal("img/tank2.png")));
@@ -160,7 +168,7 @@ public class PointsScreen implements Screen {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     dispose();
-                    game.setScreen(new LevelScreen(game, map+1, true, lives, total + scores[2]*300+scores[1]*500+scores[0]*100, scores[2]+scores[1]+scores[0]+total1, players, lives2));
+                    game.setScreen(new LevelScreen(game, map+1, true, lives, total + scores[2]*300+scores[1]*500+scores[0]*100+scores[3]*500, scores[2]+scores[1]+scores[0]+total1, players, lives2));
                 }
             });
         }
@@ -178,7 +186,7 @@ public class PointsScreen implements Screen {
         });
 
 
-        Tools.addActors(stage, l1, l2, playagain, t1, t2, t3, t1a, t2a, t3a, tt, tta, ttt, t, ot, ttta, menu);
+        Tools.addActors(stage, l1, l2, playagain, t1, t2, t3, t1a, t2a, t3a, tt, tta, ttt, t, ot, ttta, menu, b, ba);
 
     }
 

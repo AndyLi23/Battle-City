@@ -39,7 +39,7 @@ public class Tank {
         countdown = 40;
         invulnerable = 0;
 
-        if(!(this instanceof Player) && Tools.choose(4)) {
+        if(!(this instanceof Player) && Tools.choose(1)) {
             powerup = true;
             base.setColor(new Color(1, 0.6f, 0.6f, 1));
         }
