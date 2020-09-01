@@ -10,6 +10,8 @@ public class BlockManager {
     public static DelayedRemovalArray<Powerup> powerups = new DelayedRemovalArray<>();
     public static int left = -1;
 
+    public static Powerup toBeDeleted;
+
     public BlockManager(String[] arr) {
         for(int i = 0; i < 13; ++i) {
             for(int j = 0; j < 13; ++j) {
@@ -72,9 +74,17 @@ public class BlockManager {
     }
 
     public void updatePowerups(SpriteBatch batch) {
+        if(toBeDeleted != null) {
+            powerups.removeValue(toBeDeleted, true);
+            toBeDeleted = null;
+        }
         for(Powerup p : powerups) {
             p.update(batch);
         }
+    }
+
+    public static void deletePowerup(Powerup p) {
+        toBeDeleted = p;
     }
 
     public static void addPowerup(Powerup p) {

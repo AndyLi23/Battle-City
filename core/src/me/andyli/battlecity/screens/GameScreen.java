@@ -144,7 +144,7 @@ public class GameScreen implements Screen {
         blockManager.updatePowerups(batch);
 
         batch.begin();
-        for(int i = 0; i < left2+TankManager.tanks.size-players; ++i) {
+        for(int i = 0; i < left2+TankManager.getNonPlayers(); ++i) {
             leftVisual[i].draw(batch);
         }
         batch.end();

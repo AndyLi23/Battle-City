@@ -90,11 +90,11 @@ public class MenuScreen implements Screen {
 
         start = new TextButton(" 1 Player ", tStyle);
         start.setWidth(200);
-        start.setPosition(400 - start.getWidth() / 2, 160);
+        start.setPosition(400 - start.getWidth() / 2, 120);
 
         start2 = new TextButton(" 2 Player ", tStyle);
         start2.setWidth(200);
-        start2.setPosition(400 - start2.getWidth() / 2, 100);
+        start2.setPosition(400 - start2.getWidth() / 2, 60);
 
         start.addListener(new ChangeListener() {
             @Override

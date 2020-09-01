@@ -12,9 +12,29 @@ public class Powerup extends Block{
     public int type;
     public int left;
 
-    public Powerup(Vector2 position, int type) {
-        super(position, 0, 0);
-        this.position2 = new Vector2(position.x + 39, position.y + 39);
+    public Powerup(int type) {
+
+        super(new Vector2(0, 0), 0, 0);
+
+
+        while(true) {
+            position = new Vector2(Tools.random(586), Tools.random(586));
+            position2 = new Vector2(position.x + 39, position.y + 39);
+
+            boolean good = true;
+            for(int i = 0; i < 13; ++i) {
+                for(int j = 0; j < 13; ++j) {
+                    if(BlockManager.arr[i][j] != null && (BlockManager.arr[i][j].collideTank(position, position2) && (BlockManager.arr[i][j] instanceof Water || BlockManager.arr[i][j] instanceof Iron || BlockManager.arr[i][j] instanceof Spawner || BlockManager.arr[i][j] instanceof Flag))) {
+                        good = false;
+                        break;
+                    }
+                }
+            }
+
+            if(good) {
+                break;
+            }
+        }
 
         this.type = type;
 
@@ -26,6 +46,8 @@ public class Powerup extends Block{
             base = new Sprite(new Texture(Gdx.files.internal("img/star.png")));
         } else if(type == 2) {
             base = new Sprite(new Texture(Gdx.files.internal("img/shovel.png")));
+        } else if(type == 3) {
+            base = new Sprite(new Texture(Gdx.files.internal("img/tankp.png")));
         }
 
         base.setPosition(position.x, position.y);
@@ -36,7 +58,7 @@ public class Powerup extends Block{
         left--;
 
         if(left == 0) {
-            BlockManager.powerups.removeValue(this, true);
+            BlockManager.deletePowerup(this);
         }
 
         batch.begin();

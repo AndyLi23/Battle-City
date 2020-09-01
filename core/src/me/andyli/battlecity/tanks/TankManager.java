@@ -11,6 +11,7 @@ public class TankManager {
     public static DelayedRemovalArray<Bullet> bullets = new DelayedRemovalArray<>();
     public static DelayedRemovalArray<Tank> tanks = new DelayedRemovalArray<>();
     public static DelayedRemovalArray<Explosion> explosions = new DelayedRemovalArray<>();
+    public static Tank toBeDeleted;
 
     public TankManager() {
     }
@@ -22,6 +23,10 @@ public class TankManager {
     }
 
     public void updateTanks(SpriteBatch batch) {
+        if(toBeDeleted != null) {
+            tanks.removeValue(toBeDeleted, true);
+            toBeDeleted = null;
+        }
         for(Tank t : tanks) {
             t.update(batch);
         }
@@ -31,6 +36,20 @@ public class TankManager {
         for(Explosion e : explosions) {
             e.update(batch);
         }
+    }
+
+    public static int getNonPlayers() {
+        int ans = 0;
+        for(Tank t : tanks) {
+            if(!(t instanceof Player)) {
+                ans++;
+            }
+        }
+        return ans;
+    }
+
+    public static void delete(Tank t) {
+        toBeDeleted = t;
     }
 
     public static boolean containsPlayer() {

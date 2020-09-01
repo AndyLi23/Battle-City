@@ -61,7 +61,7 @@ public class Tank {
 
         if(health == 0) {
             TankManager.explosions.add(new Explosion(new Vector2(position.x + base.getWidth()/2, position.y + base.getHeight()/2), 2f, 0.2f));
-            TankManager.tanks.removeValue(this, true);
+            TankManager.delete(this);
             if(this instanceof Player) {
                 if(((Player) this).player1){
                     TankManager.addTank(new Player(new Vector2(385, 5), true));
@@ -74,7 +74,7 @@ public class Tank {
                 GameScreen.scores[type]++;
             }
             if(powerup) {
-                BlockManager.addPowerup(new Powerup(new Vector2(Tools.random(585),Tools.random(585)), Tools.random(2)));
+                BlockManager.addPowerup(new Powerup(Tools.random(4)));
             }
         } else {
 
@@ -201,7 +201,7 @@ public class Tank {
 
         for(Powerup p : BlockManager.powerups) {
             if(p.collideTank(r1p1, r1p2)) {
-                if(p.type == 1) {
+                if(p.type == 3) {
                     if(((Player) this).player1) {
                         GameScreen.lives2++;
                     } else {
@@ -209,10 +209,12 @@ public class Tank {
                     }
                 } else if (p.type == 0) {
                     invulnerable += 500;
-                } else {
+                } else if (p.type == 2) {
                     BlockManager.changeToIron();
+                } else {
+                    GameScreen.scores[3]++;
                 }
-                BlockManager.powerups.removeValue(p, true);
+                BlockManager.deletePowerup(p);
             }
         }
     }

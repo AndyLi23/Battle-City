@@ -18,8 +18,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import me.andyli.battlecity.Constants;
 import me.andyli.battlecity.utility.Tools;
 
-import java.util.Arrays;
-
 
 public class PointsScreen implements Screen {
 
