@@ -9,8 +9,11 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -23,7 +26,6 @@ import me.andyli.battlecity.utility.Tools;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.Arrays;
 
 public class GameScreen implements Screen {
 
@@ -105,10 +107,7 @@ public class GameScreen implements Screen {
         l2.setPosition(670, 190);
         l3.setPosition(670, 100);
 
-        stage.addActor(l1);
-        stage.addActor(l2);
-        stage.addActor(l3);
-
+        Tools.addActors(stage, l1, l2, l3);
 
     }
 
@@ -175,8 +174,7 @@ public class GameScreen implements Screen {
                  TankManager.explosions.clear();
                  BlockManager.arr = new Block[13][13];
                  BlockManager.powerups.clear();
-                 Gdx.app.log(total+"", "");
-                 if(GameScreen.map == 2) {
+                 if(GameScreen.map == Constants.LEVELS) {
                      game.setScreen(new PointsScreen(game, scores, map, lives, true, false, total, total1));
                  } else {
                      //game.setScreen(new GameScreen(game, map + 1, lives));

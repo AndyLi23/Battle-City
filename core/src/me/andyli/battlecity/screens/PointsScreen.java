@@ -29,14 +29,12 @@ public class PointsScreen implements Screen {
     private final ShapeRenderer renderer;
     private Label l1, l2, t1, t2, t3, t1a, t2a, t3a, tt, tta, ttt, t, ot, ttta;
     private Sprite t1s, t2s, t3s;
-    private TextButton playagain;
+    private TextButton playagain, menu;
 
 
     public PointsScreen(final Game game, int[] scores, int map, int lives, boolean win, boolean lose, int total, int total1) {
 
         renderer = new ShapeRenderer();
-
-        Gdx.app.log(Arrays.toString(scores) +"", "");
 
 
         this.game = game;
@@ -143,31 +141,45 @@ public class PointsScreen implements Screen {
         t3s.setCenter(400, 315);
 
         if(win || lose) {
-            playagain = new TextButton(" Play Again ", tStyle);
-            playagain.setPosition(400 - playagain.getWidth() / 2, 100);
+            playagain = new TextButton("Play Again", tStyle);
+            playagain.setWidth(200);
+            playagain.setPosition(400 - playagain.getWidth() / 2, 110);
 
             playagain.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     dispose();
-                    game.setScreen(new GameScreen(game, 1, lives, 0, 0));
+                    game.setScreen(new LevelScreen(game, 1, false, Constants.LIVES, 0, 0));
                 }
             });
         } else {
-            playagain = new TextButton(" Continue ", tStyle);
-            playagain.setPosition(400 - playagain.getWidth() / 2, 100);
+            playagain = new TextButton("Continue", tStyle);
+            playagain.setWidth(200);
+            playagain.setPosition(400 - playagain.getWidth() / 2, 110);
 
             playagain.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     dispose();
-                    game.setScreen(new GameScreen(game, map + 1, lives, total + scores[2]*300+scores[1]*500+scores[0]*100, scores[2]+scores[1]+scores[0]+total1));
+                    game.setScreen(new LevelScreen(game, map+1, true, lives, total + scores[2]*300+scores[1]*500+scores[0]*100, scores[2]+scores[1]+scores[0]+total1));
                 }
             });
         }
 
+        menu = new TextButton("Menu", tStyle);
+        menu.setWidth(200);
+        menu.setPosition(400 - playagain.getWidth() / 2, 60);
 
-        Tools.addActors(stage, l1, l2, playagain, t1, t2, t3, t1a, t2a, t3a, tt, tta, ttt, t, ot, ttta);
+        menu.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                dispose();
+                game.setScreen(new MenuScreen(game));
+            }
+        });
+
+
+        Tools.addActors(stage, l1, l2, playagain, t1, t2, t3, t1a, t2a, t3a, tt, tta, ttt, t, ot, ttta, menu);
 
     }
 

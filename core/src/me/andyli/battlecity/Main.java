@@ -3,7 +3,9 @@ package me.andyli.battlecity;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
 import me.andyli.battlecity.screens.GameScreen;
+import me.andyli.battlecity.screens.MenuScreen;
 
 public class Main extends Game {
 
@@ -14,7 +16,7 @@ public class Main extends Game {
 
 		game = this;
 
-		setScreen(new GameScreen(game, 1, 30, 0, 0));
+		setScreen(new MenuScreen(game));
 	}
 
 	@Override
