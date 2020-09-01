@@ -16,6 +16,7 @@ public class Spawner extends Block {
     public int counter;
     private Vector2 pos;
     private int[] list;
+    int[][] path;
 
     public Spawner(Vector2 position, int i, int j) {
         super(position, i, j);
@@ -42,6 +43,7 @@ public class Spawner extends Block {
                 } else {
                     pos = new Vector2(position.x, position.y);
                 }
+
                 GameScreen.tankManager.addTank(Tools.selectRandom(new int[]{0, 1, 2}), pos, dir);
                 spawning = false;
             } else if((counter/10)%2 == 0) {
@@ -57,12 +59,14 @@ public class Spawner extends Block {
                         GameScreen.left--;
                         spawning = true;
                         counter = 80;
+                        path = BlockManager.generatePath(x, y);
                     }
                 }
                 if (Tools.choose(1000)) {
                     GameScreen.left--;
                     spawning = true;
                     counter = 80;
+                    path = BlockManager.generatePath(x, y);
                 }
             }
         }

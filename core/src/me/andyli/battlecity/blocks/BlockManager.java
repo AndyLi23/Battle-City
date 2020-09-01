@@ -1,8 +1,13 @@
 package me.andyli.battlecity.blocks;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
+import javafx.util.Pair;
+
+import java.util.LinkedList;
+import java.util.Queue;
 
 
 public class BlockManager {
@@ -110,4 +115,95 @@ public class BlockManager {
 
         left = 500;
     }
+
+
+    public static int[][] getGrid() {
+        int[][] ans = new int[13][13];
+
+        for(int i = 0; i < 13; ++i) {
+            for(int j = 0; j < 13; ++j) {
+                if(arr[i][j] == null) {
+                    ans[i][j] = 0;
+                } else {
+                    if(arr[i][j] instanceof Grass || arr[i][j] instanceof Ice || arr[i][j] instanceof Spawner) {
+                        ans[i][j] = 0;
+                    } else if (arr[i][j] instanceof Brick) {
+                        ans[i][j] = 0;
+                    } else {
+                        ans[i][j] = -1;
+                    }
+                }
+            }
+        }
+
+        return ans;
+    }
+
+    public static int[][] generatePath(int i, int j) {
+        int[][] arr = getGrid();
+        //arr[i][j] = 1;
+
+        Queue<Pair<Integer, Integer>> queue = new LinkedList<Pair<Integer, Integer>>();;
+
+        queue.add(new Pair<>(i, j));
+
+
+        while(!queue.isEmpty()) {
+            Pair<Integer, Integer> cur = queue.poll();
+
+            int min = 10000;
+
+            if(get(arr, cur.getKey()-1, cur.getValue()) != -1) {
+                if(get(arr, cur.getKey()-1, cur.getValue()) != 0) {
+                    min = Math.min(min, get(arr, cur.getKey()-1, cur.getValue()));
+                }
+            }
+
+            if(get(arr, cur.getKey(), cur.getValue()-1) != -1) {
+                if(get(arr, cur.getKey(), cur.getValue()-1) == 0) {
+                    queue.add(new Pair<>(cur.getKey(), cur.getValue()-1));
+                } else {
+                    min = Math.min(min, get(arr, cur.getKey(), cur.getValue()-1));
+                }
+            }
+
+            if(get(arr, cur.getKey()+1, cur.getValue()) != -1) {
+                if(get(arr, cur.getKey()+1, cur.getValue()) == 0) {
+                    queue.add(new Pair<>(cur.getKey()+1, cur.getValue()));
+                } else {
+                    min = Math.min(min, get(arr, cur.getKey()+1, cur.getValue()));
+                }
+            }
+
+            if(get(arr, cur.getKey(), cur.getValue()+1) != -1) {
+                if(get(arr, cur.getKey(), cur.getValue()+1) == 0) {
+                    queue.add(new Pair<>(cur.getKey(), cur.getValue()+1));
+                } else {
+                    min = Math.min(min, get(arr, cur.getKey(), cur.getValue()+1));
+                }
+            }
+
+
+            if(min == 10000) {
+                arr[cur.getKey()][cur.getValue()] = 1;
+            } else {
+                arr[cur.getKey()][cur.getValue()] = min + 1;
+            }
+
+            //Gdx.app.log(queue.size()+"", "");
+
+        }
+
+        return arr;
+
+    }
+
+    public static int get(int[][] arr, int i, int j) {
+        if(i >= 0 && i < 13 && j >= 0 && j < 13) {
+            return arr[i][j];
+        }
+        return -1;
+    }
+
+
 }

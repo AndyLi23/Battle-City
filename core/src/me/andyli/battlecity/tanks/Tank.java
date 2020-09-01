@@ -20,6 +20,7 @@ public class Tank {
     public Sprite base;
     private int[] list;
     public boolean powerup;
+    private int[][] path;
 
     public Tank(Vector2 position, float speed, int direction, Sprite base, int cd, int health, int type) {
         this.position = position;
@@ -39,10 +40,12 @@ public class Tank {
         countdown = 40;
         invulnerable = 0;
 
-        if(!(this instanceof Player) && Tools.choose(1)) {
+        if(!(this instanceof Player) && Tools.choose(4)) {
             powerup = true;
             base.setColor(new Color(1, 0.6f, 0.6f, 1));
         }
+
+        //path = BlockManager.generatePath();
     }
 
     public void update(SpriteBatch batch) {
