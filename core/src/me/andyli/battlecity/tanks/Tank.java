@@ -14,7 +14,7 @@ import me.andyli.battlecity.screens.GameScreen;
 import me.andyli.battlecity.utility.Tools;
 
 public class Tank {
-    public int direction, cooldown, cd, health, invulnerable, type, countdown;
+    public int direction, cooldown, cd, health, invulnerable, type, countdown, frozen;
     public float speed;
     public Vector2 position, vel;
     public Sprite base;
@@ -47,6 +47,10 @@ public class Tank {
 
     public void update(SpriteBatch batch) {
 
+        if(frozen > 0) {
+            frozen--;
+        }
+
         if(invulnerable > 0) {
             invulnerable--;
         }
@@ -59,8 +63,13 @@ public class Tank {
             TankManager.explosions.add(new Explosion(new Vector2(position.x + base.getWidth()/2, position.y + base.getHeight()/2), 2f, 0.2f));
             TankManager.tanks.removeValue(this, true);
             if(this instanceof Player) {
-                GameScreen.lives--;
-                TankManager.addTank(new Player(new Vector2(5, 5)));
+                if(((Player) this).player1){
+                    TankManager.addTank(new Player(new Vector2(385, 5), true));
+                    GameScreen.lives2--;
+                } else {
+                    TankManager.addTank(new Player(new Vector2(200, 5), false));
+                    GameScreen.lives--;
+                }
             } else {
                 GameScreen.scores[type]++;
             }
@@ -85,7 +94,9 @@ public class Tank {
 
             updateVel();
 
-            position.add(vel);
+            if(frozen == 0) {
+                position.add(vel);
+            }
 
             if(this instanceof Player) {
                 collidePowerup();
@@ -118,22 +129,26 @@ public class Tank {
     }
 
     public void updateVel() {
-        if(direction == 0) {
+        if (direction == 0) {
             vel.x = 0;
             vel.y = speed;
         }
-        if(direction == 2) {
+        if (direction == 2) {
             vel.x = 0;
-            vel.y = -1*speed;
+            vel.y = -1 * speed;
         }
-        if(direction == 3) {
+        if (direction == 3) {
             vel.y = 0;
             vel.x = speed;
         }
-        if(direction == 1) {
+        if (direction == 1) {
             vel.y = 0;
-            vel.x = -1*speed;
+            vel.x = -1 * speed;
         }
+    }
+
+    public void freeze() {
+        frozen = 400;
     }
 
     public Block collide(int direction) {
@@ -187,7 +202,11 @@ public class Tank {
         for(Powerup p : BlockManager.powerups) {
             if(p.collideTank(r1p1, r1p2)) {
                 if(p.type == 1) {
-                    GameScreen.lives++;
+                    if(((Player) this).player1) {
+                        GameScreen.lives2++;
+                    } else {
+                        GameScreen.lives++;
+                    }
                 } else if (p.type == 0) {
                     invulnerable += 500;
                 } else {

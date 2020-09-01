@@ -62,9 +62,14 @@ public class Bullet {
 
                 if(Tools.collide(r1p1, r1p2, t.position, r2p2)) {
                     if(t instanceof Player || parent instanceof Player) {
-                        TankManager.explosions.add(new Explosion(new Vector2(position.x + base.getWidth()/2, position.y + base.getHeight()/2), 1.5f, 0.3f));
-                        if(t.invulnerable == 0) {
-                            t.health--;
+                        if(t instanceof Player && parent instanceof Player) {
+                            TankManager.explosions.add(new Explosion(new Vector2(position.x + base.getWidth() / 2, position.y + base.getHeight() / 2), 1.5f, 0.3f));
+                            t.freeze();
+                        } else {
+                            TankManager.explosions.add(new Explosion(new Vector2(position.x + base.getWidth() / 2, position.y + base.getHeight() / 2), 1.5f, 0.3f));
+                            if (t.invulnerable == 0) {
+                                t.health--;
+                            }
                         }
                     }
                     return true;

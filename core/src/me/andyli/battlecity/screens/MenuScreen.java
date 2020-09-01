@@ -42,7 +42,7 @@ public class MenuScreen implements Screen {
     private final ShapeRenderer renderer;
     private Label title, credit;
     private int x, y;
-    private TextButton start;
+    private TextButton start, start2;
 
 
 
@@ -88,19 +88,31 @@ public class MenuScreen implements Screen {
         credit.setAlignment(Align.center);
         credit.setPosition(400-credit.getWidth()/2, 350);
 
-        start = new TextButton(" Start ", tStyle);
+        start = new TextButton(" 1 Player ", tStyle);
         start.setWidth(200);
-        start.setPosition(400 - start.getWidth() / 2, 100);
+        start.setPosition(400 - start.getWidth() / 2, 160);
+
+        start2 = new TextButton(" 2 Player ", tStyle);
+        start2.setWidth(200);
+        start2.setPosition(400 - start2.getWidth() / 2, 100);
 
         start.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 dispose();
-                game.setScreen(new LevelScreen(game, 1, false, Constants.LIVES, 0, 0));
+                game.setScreen(new LevelScreen(game, 1, false, Constants.LIVES, 0, 0, 1, Constants.LIVES));
             }
         });
 
-        Tools.addActors(stage, title, credit, start);
+        start2.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                dispose();
+                game.setScreen(new LevelScreen(game, 1, false, Constants.LIVES, 0, 0, 2, Constants.LIVES));
+            }
+        });
+
+        Tools.addActors(stage, title, credit, start, start2);
 
     }
 
@@ -116,6 +128,7 @@ public class MenuScreen implements Screen {
         y = input.getY();
 
         if(x > 400-credit.getWidth()/2 && x < 400+credit.getWidth()/2 && y < 274 && y > 274 - credit.getHeight()) {
+            credit.setColor(Color.LIGHT_GRAY);
             if(input.isButtonJustPressed(0)) {
                 openWebpage("https://github.com/AndyLi23");
             }
@@ -125,6 +138,7 @@ public class MenuScreen implements Screen {
 
         stage.act(delta);
         stage.draw();
+
     }
 
 

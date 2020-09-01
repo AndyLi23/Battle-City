@@ -30,9 +30,9 @@ public class PointsScreen implements Screen {
     private Label l1, l2, t1, t2, t3, t1a, t2a, t3a, tt, tta, ttt, t, ot, ttta;
     private Sprite t1s, t2s, t3s;
     private TextButton playagain, menu;
+    private int players;
 
-
-    public PointsScreen(final Game game, int[] scores, int map, int lives, boolean win, boolean lose, int total, int total1) {
+    public PointsScreen(final Game game, int[] scores, int map, int lives, boolean win, boolean lose, int total, int total1, int players, int lives2) {
 
         renderer = new ShapeRenderer();
 
@@ -40,6 +40,7 @@ public class PointsScreen implements Screen {
         this.game = game;
         this.batch = new SpriteBatch();
         this.stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()), batch);
+        this.players = players;
 
         Gdx.input.setInputProcessor(this.stage);
 
@@ -149,7 +150,7 @@ public class PointsScreen implements Screen {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     dispose();
-                    game.setScreen(new LevelScreen(game, 1, false, Constants.LIVES, 0, 0));
+                    game.setScreen(new LevelScreen(game, 1, false, Constants.LIVES, 0, 0, players, Constants.LIVES));
                 }
             });
         } else {
@@ -161,7 +162,7 @@ public class PointsScreen implements Screen {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     dispose();
-                    game.setScreen(new LevelScreen(game, map+1, true, lives, total + scores[2]*300+scores[1]*500+scores[0]*100, scores[2]+scores[1]+scores[0]+total1));
+                    game.setScreen(new LevelScreen(game, map+1, true, lives, total + scores[2]*300+scores[1]*500+scores[0]*100, scores[2]+scores[1]+scores[0]+total1, players, lives2));
                 }
             });
         }

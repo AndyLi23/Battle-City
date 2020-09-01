@@ -28,15 +28,16 @@ public class LevelScreen implements Screen {
     private final Game game;
     private final SpriteBatch batch;
     private final ShapeRenderer renderer;
-    private Label l1;
-    private int map, left, lives, total, total1;
+    private Label l1, l2;
+    private int map, left, lives, total, total1, players, lives2;
     private boolean timed;
 
 
-    public LevelScreen(final Game game, int map, boolean timed, int lives, int total, int total1) {
+    public LevelScreen(final Game game, int map, boolean timed, int lives, int total, int total1, int players, int lives2) {
 
         renderer = new ShapeRenderer();
 
+        this.lives2 = lives2;
 
         this.game = game;
         this.map = map;
@@ -45,6 +46,7 @@ public class LevelScreen implements Screen {
         this.lives = lives;
         this.total = total;
         this.total1 = total1;
+        this.players = players;
 
         this.batch = new SpriteBatch();
         this.stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()), batch);
@@ -58,6 +60,10 @@ public class LevelScreen implements Screen {
         lStyle.font = Constants.FONT_MEDIUM;
         lStyle.fontColor = Color.BLACK;
 
+        Label.LabelStyle l2Style = new Label.LabelStyle();
+        l2Style.font = Constants.FONT;
+        l2Style.fontColor = Color.BLACK;
+
         TextButton.TextButtonStyle tStyle = new TextButton.TextButtonStyle();
         tStyle.font = Constants.FONT;
         tStyle.up = Constants.SKIN.getDrawable("button_03");
@@ -68,8 +74,16 @@ public class LevelScreen implements Screen {
         l1.setAlignment(Align.center);
         l1.setPosition(400-l1.getWidth()/2, 312);
 
+        l2 = new Label("< ENTER >", l2Style);
+        l2.setAlignment(Align.center);
+        l2.setPosition(400-l2.getWidth()/2, 100);
 
-        Tools.addActors(stage, l1);
+        if(timed) {
+            l2.setText("ENTER");
+        }
+
+
+        Tools.addActors(stage, l1, l2);
 
     }
 
@@ -89,18 +103,22 @@ public class LevelScreen implements Screen {
             if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT) || Gdx.input.isKeyJustPressed(Input.Keys.D)) {
                 if (map != Constants.LEVELS) {
                     map++;
+                } else {
+                    map = 1;
                 }
             }
 
             if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT) || Gdx.input.isKeyJustPressed(Input.Keys.A)) {
                 if (map != 1) {
                     map--;
+                } else {
+                    map = Constants.LEVELS;
                 }
             }
         }
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || (timed && left == 0)) {
-            game.setScreen(new GameScreen(game, map, lives, total, total1));
+            game.setScreen(new GameScreen(game, map, lives, total, total1, players, lives2));
         }
 
         l1.setText("LEVEL " + map);

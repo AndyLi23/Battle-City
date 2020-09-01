@@ -38,20 +38,22 @@ public class GameScreen implements Screen {
     private String arr[];
     public BlockManager blockManager;
     public static TankManager tankManager;
-    public static int left, left2;
+    public static int left, left2, players;
     public static Sprite[] leftVisual;
-    public static int lives, total, total1;
-    private Label l1, l2, l3;
+    public static int lives, total, total1, lives2;
+    private Label l1, l2, l3, l4, l5;
     public static int[] scores = new int[4];
     public boolean ended;
 
 
-    public GameScreen(final Game game, int map, int lives, int total, int total1) {
+    public GameScreen(final Game game, int map, int lives, int total, int total1, int players, int lives2) {
 
         renderer = new ShapeRenderer();
 
         GameScreen.total = total;
         GameScreen.total1 = total1;
+
+        GameScreen.players = players;
 
         Label.LabelStyle lStyle = new Label.LabelStyle();
         lStyle.font = Constants.FONT;
@@ -80,10 +82,14 @@ public class GameScreen implements Screen {
         blockManager = new BlockManager(arr);
         tankManager = new TankManager();
 
-        TankManager.addTank(new Player(new Vector2(5, 5)));
+        TankManager.addTank(new Player(new Vector2(200, 5), false));
+        if(players == 2) {
+            TankManager.addTank(new Player(new Vector2(385, 5), true));
+        }
 
         left = left2 = 3;
         GameScreen.lives = lives;
+        GameScreen.lives2 = lives2;
 
         leftVisual = new Sprite[left];
 
@@ -98,16 +104,27 @@ public class GameScreen implements Screen {
 
         l1 = new Label("IP", lStyle);
         l1.setAlignment(Align.left);
-        l2 = new Label(" 3", lStyle);
+        l2 = new Label(lives+"", lStyle);
         l2.setAlignment(Align.left);
-        l3 = new Label("Lvl"+map, lStyle);
-        l3.setAlignment(Align.left);
+        if(players == 2) {
+            l3 = new Label("2P", lStyle);
+            l3.setAlignment(Align.left);
+            l4 = new Label(lives2 + "", lStyle);
+            l4.setAlignment(Align.left);
+        } else {
+            l4 = new Label("", lStyle);
+            l3 = new Label("", lStyle);
+        }
+        l5 = new Label("Lvl "+map, lStyle);
+        l5.setAlignment(Align.left);
 
         l1.setPosition(670, 220);
         l2.setPosition(670, 190);
-        l3.setPosition(670, 100);
+        l3.setPosition(670, 140);
+        l4.setPosition(670, 110);
+        l5.setPosition(670, 50);
 
-        Tools.addActors(stage, l1, l2, l3);
+        Tools.addActors(stage, l1, l2, l3, l4, l5);
 
     }
 
@@ -127,13 +144,13 @@ public class GameScreen implements Screen {
         blockManager.updatePowerups(batch);
 
         batch.begin();
-        for(int i = 0; i < left2+TankManager.tanks.size-1; ++i) {
+        for(int i = 0; i < left2+TankManager.tanks.size-players; ++i) {
             leftVisual[i].draw(batch);
         }
         batch.end();
 
         if(!ended) {
-            if (left2 == 0 && TankManager.tanks.size == 1 && !BlockManager.spawning()) {
+            if (left2 == 0 && TankManager.tanks.size == players && !BlockManager.spawning()) {
                 nextLevel();
                 ended = true;
             }
@@ -144,7 +161,11 @@ public class GameScreen implements Screen {
             }
         }
 
-        l2.setText(lives+"");
+        l2.setText(""+lives);
+
+        if(players == 2) {
+            l4.setText("" + lives2);
+        }
 
         stage.act(delta);
         stage.draw();
@@ -159,7 +180,7 @@ public class GameScreen implements Screen {
                 TankManager.explosions.clear();
                 BlockManager.arr = new Block[13][13];
                 BlockManager.powerups.clear();
-                game.setScreen(new PointsScreen(game, scores, map, lives, false, true, total, total1));
+                game.setScreen(new PointsScreen(game, scores, map, lives, false, true, total, total1, players, lives2));
                 GameScreen.scores = new int[4];
             }
         }, 2f);
@@ -175,10 +196,10 @@ public class GameScreen implements Screen {
                  BlockManager.arr = new Block[13][13];
                  BlockManager.powerups.clear();
                  if(GameScreen.map == Constants.LEVELS) {
-                     game.setScreen(new PointsScreen(game, scores, map, lives, true, false, total, total1));
+                     game.setScreen(new PointsScreen(game, scores, map, lives, true, false, total, total1, players, lives2));
                  } else {
                      //game.setScreen(new GameScreen(game, map + 1, lives));
-                     game.setScreen(new PointsScreen(game, scores, map, lives, false, false, total, total1));
+                     game.setScreen(new PointsScreen(game, scores, map, lives, false, false, total, total1, players, lives2));
                  }
                  GameScreen.scores = new int[4];
              }
