@@ -74,6 +74,15 @@ public class TankManager {
         }
     }
 
+    public static void removePlayer() {
+        for(Tank t : tanks) {
+            if(t instanceof Player) {
+                explosions.add(new Explosion(t.position.add(new Vector2(20, 20)), 2f, 0.1f));
+                tanks.removeValue(t, true);
+            }
+        }
+    }
+
     public static void addTank(Tank t) {
         tanks.add(t);
     }

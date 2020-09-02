@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import me.andyli.battlecity.screens.GameScreen;
+import me.andyli.battlecity.tanks.TankManager;
 import me.andyli.battlecity.utility.Tools;
 
 public class Flag extends Block {
@@ -33,6 +34,7 @@ public class Flag extends Block {
         health--;
         if(health == 0) {
             BlockManager.arr[x][y] = null;
+            TankManager.removePlayer();
             GameScreen.gameOver();
         }
         return Tools.collide(r1p1, r1p2, position, position2);

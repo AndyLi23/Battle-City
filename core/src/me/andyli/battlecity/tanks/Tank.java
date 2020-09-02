@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import javafx.util.Pair;
+import me.andyli.battlecity.Constants;
 import me.andyli.battlecity.blocks.Block;
 import me.andyli.battlecity.blocks.BlockManager;
 import me.andyli.battlecity.blocks.Ice;
@@ -50,13 +51,39 @@ public class Tank {
         }
 
         this.path = path;
-        this.cur = 0;
+        this.cur = 1;
 
+        Gdx.app.log(path+"", "");
+
+        if(path != null) {
+            updateDirection(0);
+        }
+    }
+
+    public void updateDirection(int cur) {
+        if(path.get(cur).getKey() > path.get(cur+1).getKey()) {
+            direction = 0;
+        }
+        if(path.get(cur).getKey() < path.get(cur+1).getKey()) {
+            direction = 2;
+        }
+        if(path.get(cur).getValue() < path.get(cur+1).getValue()) {
+            direction = 3;
+        }
+        if(path.get(cur).getValue() > path.get(cur+1).getValue()) {
+            direction = 1;
+        }
     }
 
     public Pair<Integer, Integer> getXY() {
         int y1 = 12-((int) position.y / 48);
         int x1 = (int) position.x / 48;
+        return new Pair<>(y1, x1);
+    }
+
+    public Pair<Integer, Integer> getXY2() {
+        int y1 = 12-((int) (position.y+39) / 48);
+        int x1 = (int) (position.x+39) / 48;
         return new Pair<>(y1, x1);
     }
 
@@ -109,16 +136,22 @@ public class Tank {
 
             updateVel();
 
-            if(frozen == 0) {
+
+            if(collide(direction) != null) {
                 position.add(vel);
-            }
+            } else {
 
-            if(this instanceof Player) {
-                collidePowerup();
-            }
+                if (frozen == 0) {
+                    position.add(vel);
+                }
 
-            if ((collideTank() || (collide(direction) != null && !(collide(direction) instanceof Ice)))) {
-                position.sub(vel);
+                if (this instanceof Player) {
+                    collidePowerup();
+                }
+
+                if ((collideTank() || (collide(direction) != null && !(collide(direction) instanceof Ice)))) {
+                    position.sub(vel);
+                }
             }
 
             if (position.x < 0) {
@@ -250,6 +283,7 @@ public class Tank {
     }
 
     public void fire() {
+
         if(cooldown == 0) {
             Vector2 temp;
             if (direction == 0) {
@@ -268,19 +302,31 @@ public class Tank {
     }
 
     public void takeInput() {
-        // RANDOM -------------
 
-        /*if(countdown == 0) {
-            if (Tools.choose(60)) {
-                direction = Tools.selectRandom(list);
+        if(Constants.MODE == 1) {
+
+            if ((path.get(cur).getKey().equals(getXY().getKey()) && path.get(cur).getValue().equals(getXY().getValue())) && path.get(cur).getKey().equals(getXY2().getKey()) && path.get(cur).getValue().equals(getXY2().getValue())) {
+                if (cur != path.size() - 1) {
+                    updateDirection(cur);
+                    cur++;
+                }
             }
 
-            if (Tools.choose(10)) {
-                fire();
-            }
-        }*/
+            fire();
 
-        // PATH -------------
+        } else {
+
+            if(countdown == 0) {
+                if (Tools.choose(60)) {
+                    direction = Tools.selectRandom(list);
+                }
+
+                if (Tools.choose(10)) {
+                    fire();
+                }
+            }
+
+        }
 
 
 

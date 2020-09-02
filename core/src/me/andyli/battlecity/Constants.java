@@ -20,6 +20,7 @@ public class Constants {
     public static final Skin SKIN_ALTERNATE = new Skin(ATLAS_ALTERNATE);
     public static final int LEVELS = 2;
     public static final int LIVES = 30;
+    public static int MODE = 1;
 
     public static void disposeAll() {
         FONT.dispose();

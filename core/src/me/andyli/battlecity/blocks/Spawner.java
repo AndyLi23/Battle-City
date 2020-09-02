@@ -41,11 +41,13 @@ public class Spawner extends Block {
             if (counter == 0) {
                 GameScreen.left2--;
                 int dir = Tools.selectRandom(list);
-                if(dir == 3) {
+                /*if(dir == 3) {
                     pos = new Vector2(position.x+9, position.y);
                 } else {
                     pos = new Vector2(position.x, position.y);
-                }
+                }*/
+
+                pos = new Vector2(position.x, position.y);
 
                 path = BlockManager.getPath(x, y);
 
@@ -97,6 +99,10 @@ public class Spawner extends Block {
 
     public boolean collideBullet(Vector2 r1p1, Vector2 r1p2, int direction) {
         return false;
+    }
+
+    public boolean collideTank(Vector2 r1p1, Vector2 r1p2) {
+        return Tools.collide(r1p1, r1p2, position, position2);
     }
 
     public void spawn() {

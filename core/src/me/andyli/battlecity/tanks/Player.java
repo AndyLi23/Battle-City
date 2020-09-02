@@ -12,7 +12,7 @@ public class Player extends Tank{
     public boolean player1;
 
     public Player(Vector2 position, boolean player1) {
-        super(position, 2, 0, new Sprite(new Texture(Gdx.files.internal("img/tank1.png"))), 25, 1, -1);
+        super(position, 2, 0, new Sprite(new Texture(Gdx.files.internal("img/tank1.png"))), 25, 1, -1, null);
         this.player1 = player1;
         invulnerable = 100;
     }
