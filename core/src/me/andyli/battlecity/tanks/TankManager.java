@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
+import javafx.util.Pair;
+
+import java.util.ArrayList;
 
 public class TankManager {
     public static DelayedRemovalArray<Bullet> bullets = new DelayedRemovalArray<>();
@@ -61,13 +64,13 @@ public class TankManager {
         return false;
     }
 
-    public void addTank(int type, Vector2 position, int direction) {
+    public void addTank(int type, Vector2 position, int direction, ArrayList<Pair<Integer, Integer>> path) {
         if(type == 0) {
-            tanks.add(new Tank(position, 1.5f, direction, new Sprite(new Texture(Gdx.files.internal("img/tank2.png"))), 50, 1, type));
+            tanks.add(new Tank(position, 1.5f, direction, new Sprite(new Texture(Gdx.files.internal("img/tank2.png"))), 50, 1, type, path));
         } else if(type == 1) {
-            tanks.add(new Tank(position, 0.8f, direction, new Sprite(new Texture(Gdx.files.internal("img/tank34.png"))), 50, 4, type));
+            tanks.add(new Tank(position, 0.8f, direction, new Sprite(new Texture(Gdx.files.internal("img/tank34.png"))), 50, 4, type, path));
         } else if(type == 2) {
-            tanks.add(new Tank(position, 2.5f, direction, new Sprite(new Texture(Gdx.files.internal("img/tank4.png"))), 40, 1, type));
+            tanks.add(new Tank(position, 2.5f, direction, new Sprite(new Texture(Gdx.files.internal("img/tank4.png"))), 40, 1, type, path));
         }
     }
 

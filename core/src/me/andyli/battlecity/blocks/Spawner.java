@@ -5,9 +5,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import javafx.util.Pair;
 import me.andyli.battlecity.screens.GameScreen;
 import me.andyli.battlecity.tanks.TankManager;
 import me.andyli.battlecity.utility.Tools;
+
+import java.util.ArrayList;
 
 public class Spawner extends Block {
 
@@ -16,7 +19,7 @@ public class Spawner extends Block {
     public int counter;
     private Vector2 pos;
     private int[] list;
-    int[][] path;
+    ArrayList<Pair<Integer, Integer>> path;
 
     public Spawner(Vector2 position, int i, int j) {
         super(position, i, j);
@@ -44,7 +47,26 @@ public class Spawner extends Block {
                     pos = new Vector2(position.x, position.y);
                 }
 
-                GameScreen.tankManager.addTank(Tools.selectRandom(new int[]{0, 1, 2}), pos, dir);
+                path = BlockManager.getPath(x, y);
+
+                GameScreen.tankManager.addTank(Tools.selectRandom(new int[]{0, 1, 2}), pos, dir, path);
+
+                /*path = BlockManager.generatePath(x, y);
+
+                for(int i = 0; i < 13; ++i) {
+                    StringBuilder s = new StringBuilder();
+                    for(int j = 0; j < 13; ++j) {
+                        s.append(path[i][j]).append(" ");
+                    }
+                    Gdx.app.log(String.valueOf(s), "");
+                }
+
+                path = BlockManager.getPath(x, y);
+
+                Gdx.app.log(path+"", "");*/
+
+
+
                 spawning = false;
             } else if((counter/10)%2 == 0) {
                 base.setTexture(new Texture(Gdx.files.internal("img/spawner1.png")));
@@ -59,14 +81,12 @@ public class Spawner extends Block {
                         GameScreen.left--;
                         spawning = true;
                         counter = 80;
-                        path = BlockManager.generatePath(x, y);
                     }
                 }
                 if (Tools.choose(1000)) {
                     GameScreen.left--;
                     spawning = true;
                     counter = 80;
-                    path = BlockManager.generatePath(x, y);
                 }
             }
         }

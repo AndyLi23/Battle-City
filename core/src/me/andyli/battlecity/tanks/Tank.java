@@ -6,12 +6,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import javafx.util.Pair;
 import me.andyli.battlecity.blocks.Block;
 import me.andyli.battlecity.blocks.BlockManager;
 import me.andyli.battlecity.blocks.Ice;
 import me.andyli.battlecity.blocks.Powerup;
 import me.andyli.battlecity.screens.GameScreen;
 import me.andyli.battlecity.utility.Tools;
+
+import java.util.ArrayList;
 
 public class Tank {
     public int direction, cooldown, cd, health, invulnerable, type, countdown, frozen;
@@ -20,9 +23,10 @@ public class Tank {
     public Sprite base;
     private int[] list;
     public boolean powerup;
-    private int[][] path;
+    private ArrayList<Pair<Integer, Integer>> path;
+    private int cur;
 
-    public Tank(Vector2 position, float speed, int direction, Sprite base, int cd, int health, int type) {
+    public Tank(Vector2 position, float speed, int direction, Sprite base, int cd, int health, int type, ArrayList<Pair<Integer, Integer>> path) {
         this.position = position;
         this.speed = speed;
         this.direction = direction;
@@ -45,7 +49,15 @@ public class Tank {
             base.setColor(new Color(1, 0.6f, 0.6f, 1));
         }
 
-        //path = BlockManager.generatePath();
+        this.path = path;
+        this.cur = 0;
+
+    }
+
+    public Pair<Integer, Integer> getXY() {
+        int y1 = 12-((int) position.y / 48);
+        int x1 = (int) position.x / 48;
+        return new Pair<>(y1, x1);
     }
 
     public void update(SpriteBatch batch) {
@@ -256,7 +268,9 @@ public class Tank {
     }
 
     public void takeInput() {
-        if(countdown == 0) {
+        // RANDOM -------------
+
+        /*if(countdown == 0) {
             if (Tools.choose(60)) {
                 direction = Tools.selectRandom(list);
             }
@@ -264,6 +278,12 @@ public class Tank {
             if (Tools.choose(10)) {
                 fire();
             }
-        }
+        }*/
+
+        // PATH -------------
+
+
+
+
     }
 }

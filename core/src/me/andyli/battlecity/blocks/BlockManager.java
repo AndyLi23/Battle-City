@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
 import javafx.util.Pair;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -14,6 +15,8 @@ public class BlockManager {
     public static Block[][] arr = new Block[13][13];
     public static DelayedRemovalArray<Powerup> powerups = new DelayedRemovalArray<>();
     public static int left = -1;
+
+    private static int min, i, j;
 
     public static Powerup toBeDeleted;
 
@@ -125,10 +128,10 @@ public class BlockManager {
                 if(arr[i][j] == null) {
                     ans[i][j] = 0;
                 } else {
-                    if(arr[i][j] instanceof Grass || arr[i][j] instanceof Ice || arr[i][j] instanceof Spawner) {
+                    if(arr[i][j] instanceof Grass || arr[i][j] instanceof Ice) {
                         ans[i][j] = 0;
                     } else if (arr[i][j] instanceof Brick) {
-                        ans[i][j] = 0;
+                        ans[i][j] = 4;
                     } else {
                         ans[i][j] = -1;
                     }
@@ -141,9 +144,9 @@ public class BlockManager {
 
     public static int[][] generatePath(int i, int j) {
         int[][] arr = getGrid();
-        //arr[i][j] = 1;
+        boolean[][] seen = new boolean[13][13];
 
-        Queue<Pair<Integer, Integer>> queue = new LinkedList<Pair<Integer, Integer>>();;
+        Queue<Pair<Integer, Integer>> queue = new LinkedList<>();;
 
         queue.add(new Pair<>(i, j));
 
@@ -151,47 +154,52 @@ public class BlockManager {
         while(!queue.isEmpty()) {
             Pair<Integer, Integer> cur = queue.poll();
 
-            int min = 10000;
+            if(!seen[cur.getKey()][cur.getValue()]) {
+                seen[cur.getKey()][cur.getValue()] = true;
 
-            if(get(arr, cur.getKey()-1, cur.getValue()) != -1) {
-                if(get(arr, cur.getKey()-1, cur.getValue()) != 0) {
-                    min = Math.min(min, get(arr, cur.getKey()-1, cur.getValue()));
+                int min = 10000;
+
+                if (get(arr, cur.getKey() - 1, cur.getValue()) != -1) {
+                    if (!seen[cur.getKey()-1][cur.getValue()]) {
+                        queue.add(new Pair<>(cur.getKey() - 1, cur.getValue()));
+                    } else {
+                        min = Math.min(min, get(arr, cur.getKey() - 1, cur.getValue()));
+                    }
                 }
-            }
 
-            if(get(arr, cur.getKey(), cur.getValue()-1) != -1) {
-                if(get(arr, cur.getKey(), cur.getValue()-1) == 0) {
-                    queue.add(new Pair<>(cur.getKey(), cur.getValue()-1));
+                if (get(arr, cur.getKey(), cur.getValue() - 1) != -1) {
+                    if (!seen[cur.getKey()][cur.getValue()-1]) {
+                        queue.add(new Pair<>(cur.getKey(), cur.getValue() - 1));
+                    } else {
+                        min = Math.min(min, get(arr, cur.getKey(), cur.getValue() - 1));
+                    }
+                }
+
+                if (get(arr, cur.getKey() + 1, cur.getValue()) != -1) {
+                    if (!seen[cur.getKey()+1][cur.getValue()]) {
+                        queue.add(new Pair<>(cur.getKey() + 1, cur.getValue()));
+                    } else {
+                        min = Math.min(min, get(arr, cur.getKey() + 1, cur.getValue()));
+                    }
+                }
+
+                if (get(arr, cur.getKey(), cur.getValue() + 1) != -1) {
+                    if (!seen[cur.getKey()][cur.getValue()+1]) {
+                        queue.add(new Pair<>(cur.getKey(), cur.getValue() + 1));
+                    } else {
+                        min = Math.min(min, get(arr, cur.getKey(), cur.getValue() + 1));
+                    }
+                }
+
+
+                if (min == 10000) {
+                    arr[cur.getKey()][cur.getValue()] = 1;
                 } else {
-                    min = Math.min(min, get(arr, cur.getKey(), cur.getValue()-1));
+                    arr[cur.getKey()][cur.getValue()] += min + 1;
                 }
+
+                //Gdx.app.log(arr[cur.getKey()][cur.getValue()] + "", "");
             }
-
-            if(get(arr, cur.getKey()+1, cur.getValue()) != -1) {
-                if(get(arr, cur.getKey()+1, cur.getValue()) == 0) {
-                    queue.add(new Pair<>(cur.getKey()+1, cur.getValue()));
-                } else {
-                    min = Math.min(min, get(arr, cur.getKey()+1, cur.getValue()));
-                }
-            }
-
-            if(get(arr, cur.getKey(), cur.getValue()+1) != -1) {
-                if(get(arr, cur.getKey(), cur.getValue()+1) == 0) {
-                    queue.add(new Pair<>(cur.getKey(), cur.getValue()+1));
-                } else {
-                    min = Math.min(min, get(arr, cur.getKey(), cur.getValue()+1));
-                }
-            }
-
-
-            if(min == 10000) {
-                arr[cur.getKey()][cur.getValue()] = 1;
-            } else {
-                arr[cur.getKey()][cur.getValue()] = min + 1;
-            }
-
-            //Gdx.app.log(queue.size()+"", "");
-
         }
 
         return arr;
@@ -203,6 +211,71 @@ public class BlockManager {
             return arr[i][j];
         }
         return -1;
+    }
+
+    public static ArrayList<Pair<Integer, Integer>> getPath(int i, int j) {
+        int[][] path = generatePath(i, j);
+
+        /*for(int k = 0; k < 13; ++k) {
+            StringBuilder s = new StringBuilder();
+            for(int l = 0; l < 13; ++l) {
+                s.append(path[k][l]).append(" ");
+            }
+            Gdx.app.log(String.valueOf(s), "");
+        }*/
+
+        ArrayList<Pair<Integer, Integer>> ans = new ArrayList<>();
+
+        Pair<Integer, Integer> cur = new Pair<>(12, 6);
+
+        while(true) {
+            ans.add(cur);
+            i = cur.getKey();
+            j = cur.getValue();
+            min = 10000;
+
+            if(get(path, i+1, j) != -1) {
+                min = Math.min(min, get(path, i+1, j));
+            }
+            if(get(path, i-1, j) != -1) {
+                min = Math.min(min, get(path, i-1, j));
+            }
+            if(get(path, i, j+1) != -1) {
+                min = Math.min(min, get(path, i, j+1));
+            }
+            if(get(path, i, j-1) != -1) {
+                min = Math.min(min, get(path, i, j-1));
+            }
+
+
+            if(path[i][j] != -1 && min > path[i][j]) {
+                break;
+            }
+
+            if(get(path, i+1, j) == min) {
+                cur = new Pair<>(i+1, j);
+            } else if(get(path, i-1, j) == min) {
+                cur = new Pair<>(i-1, j);
+            } else if(get(path, i, j+1) == min) {
+                cur = new Pair<>(i, j+1);
+            } else if(get(path, i, j-1) == min) {
+                cur = new Pair<>(i, j-1);
+            }
+
+        }
+
+        ans = reverse(ans);
+        return ans;
+    }
+
+    public static ArrayList<Pair<Integer, Integer>> reverse(ArrayList<Pair<Integer, Integer>> arr) {
+        Pair<Integer, Integer> temp;
+        for(int i = 0; i < arr.size()/2; ++i) {
+            temp = arr.get(i);
+            arr.set(i, arr.get(arr.size()-i-1));
+            arr.set(arr.size()-i-1, temp);
+        }
+        return arr;
     }
 
 
