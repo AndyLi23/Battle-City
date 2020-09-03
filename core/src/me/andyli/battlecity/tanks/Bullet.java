@@ -19,7 +19,6 @@ public class Bullet {
 
     public Bullet(Vector2 position, Vector2 speed, int direction, Tank parent, float damage) {
         //initialize
-        this.position = position;
         this.speed = speed;
         this.direction = direction;
         this.parent = parent;
@@ -27,7 +26,16 @@ public class Bullet {
 
 
         //sprite
-        base = new Sprite(new Texture(Gdx.files.internal("img/bullet.png")));
+        if(parent.gunType == 3) {
+            base = new Sprite(new Texture(Gdx.files.internal("img/bullet1.png")));
+        } else if (parent.gunType == 1 || parent.gunType == 4) {
+            base = new Sprite(new Texture(Gdx.files.internal("img/bullet2.png")));
+        } else {
+            base = new Sprite(new Texture(Gdx.files.internal("img/bullet.png")));
+        }
+
+        this.position = position.sub(new Vector2(base.getWidth()/2, base.getHeight()/2));
+
         base.setCenter(position.x + base.getWidth()/2, position.y + base.getHeight()/2);
         base.rotate(direction*90);
     }
@@ -57,14 +65,8 @@ public class Bullet {
     }
 
     public boolean collideTank() {
-        //bullet locations
-        if(direction == 0 || direction == 2) {
-            r1p1 = new Vector2(position.x, position.y);
-            r1p2 = new Vector2(position.x+9, position.y+12);
-        } else {
-            r1p1 = new Vector2(position.x, position.y);
-            r1p2 = new Vector2(position.x+12, position.y+9);
-        }
+        r1p1 = new Vector2(position.x, position.y);
+        r1p2 = getPosition();
 
         //iterate through tanks
         for(Tank t : TankManager.tanks) {
@@ -95,16 +97,24 @@ public class Bullet {
         return false;
     }
 
+    public Vector2 getPosition() {
+        if(direction == 0 || direction == 2) {
+            return new Vector2(position.x+base.getWidth(), position.y+base.getHeight());
+        } else {
+            return new Vector2(position.x+base.getHeight(), position.y+base.getWidth());
+        }
+    }
+
     public boolean collideBullet() {
         //own position
         r1p1 = new Vector2(position.x, position.y);
-        r1p2 = new Vector2(position.x + 12, position.y + 12);
+        r1p2 = getPosition();
 
 
         for(int i = 0; i < TankManager.bullets.size; ++i) {
-            if(!TankManager.bullets.get(i).equals(this)) {
+            if(!TankManager.bullets.get(i).equals(this) && !(TankManager.bullets.get(i).parent.equals(parent))) {
                 //other bullet position
-                r2p2 = new Vector2(TankManager.bullets.get(i).position.x + 12, TankManager.bullets.get(i).position.y + 12);
+                r2p2 = TankManager.bullets.get(i).getPosition();
 
                 if (Tools.collide(r1p1, r1p2, TankManager.bullets.get(i).position, r2p2)) {
                     //two bullets hit
@@ -126,18 +136,16 @@ public class Bullet {
             y2 = 12 - ((int) (position.y + 12) / 48);
             x1 = (int) position.x / 48;
             x2 = (int) (position.x + 9) / 48;
-
-            r1p1 = new Vector2(position.x, position.y);
-            r1p2 = new Vector2(position.x+9, position.y+12);
         } else {
             y1 = 12 - ((int) position.y / 48);
             y2 = 12 - ((int) (position.y + 9) / 48);
             x1 = (int) position.x / 48;
             x2 = (int) (position.x + 12) / 48;
-
-            r1p1 = new Vector2(position.x, position.y);
-            r1p2 = new Vector2(position.x+12, position.y+9);
         }
+
+
+        r1p1 = new Vector2(position.x, position.y);
+        r1p2 = getPosition();
         //------------------------------------------
 
 

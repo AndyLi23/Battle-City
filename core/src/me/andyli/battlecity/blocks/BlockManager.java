@@ -319,21 +319,25 @@ public class BlockManager {
 
 
             //pick random minimum cost path----------------------------------------------
-            if(Constants.MODE == 1 || ans.size()==1) {
-                if(get(path, i+1, j) == min) {
-                    possible.add(new Pair<>(i+1, j));
+
+            if (Constants.MODE == 1 || ans.size() == 1) {
+                if (get(path, i + 1, j) == min) {
+                    possible.add(new Pair<>(i + 1, j));
                 }
-                if(get(path, i-1, j) == min) {
-                    possible.add(new Pair<>(i-1, j));
+                if (get(path, i - 1, j) == min) {
+                    possible.add(new Pair<>(i - 1, j));
                 }
-                if(get(path, i, j+1) == min) {
-                    possible.add(new Pair<>(i, j+1));
+                if (get(path, i, j + 1) == min) {
+                    possible.add(new Pair<>(i, j + 1));
                 }
-                if(get(path, i, j-1) == min) {
-                    possible.add(new Pair<>(i, j-1));
+                if (get(path, i, j - 1) == min) {
+                    possible.add(new Pair<>(i, j - 1));
                 }
             }
 
+
+            //possible.remove(new Pair<>(11, 5));
+            //possible.remove(new Pair<>(11, 7));
 
             cur = Tools.selectRandom(possible);
             possible.clear();

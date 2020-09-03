@@ -25,6 +25,7 @@ public class Tank {
     public Sprite base;
     public boolean powerup;
     private ArrayList<Pair<Integer, Integer>> path;
+    public Sprite inv;
 
     public Tank(Vector2 position, float speed, int direction, Sprite base, int gunType, float health, int type, ArrayList<Pair<Integer, Integer>> path, boolean powerup) {
         //initialize------------------------
@@ -44,6 +45,8 @@ public class Tank {
         countdown = 40;
         invulnerable = 0;
 
+        this.inv = new Sprite(new Texture(Gdx.files.internal("img/blank.png")));
+
         //gun types
 
         if(gunType == 0) {
@@ -51,7 +54,7 @@ public class Tank {
             damage = 1;
         } else if (gunType == 1) {
             cd = 8;
-            damage = 0.1f;
+            damage = 0.15f;
             mag = 5;
         } else if (gunType == 2) {
             cd = 40;
@@ -59,6 +62,14 @@ public class Tank {
         } else if (gunType == 3) {
             cd = 30;
             damage = 1;
+        } else if (gunType == 4) {
+            cd = 5;
+            damage = 0.3f;
+            mag = 5;
+        } else if (gunType == 5) {
+            cd = 3;
+            damage = 0.1f;
+            mag = 20;
         }
 
 
@@ -111,7 +122,7 @@ public class Tank {
         return new Pair<>(y1, x1);
     }
 
-    public void update(SpriteBatch batch, ShapeRenderer renderer) {
+    public void update(SpriteBatch batch) {
         //countdown------------
         if(frozen > 0) {
             frozen--;
@@ -135,14 +146,19 @@ public class Tank {
 
             //spawn new player
             if(this instanceof Player) {
+                Gdx.app.log(GameScreen.lives+"", GameScreen.lives2+"");
                 if(((Player) this).player1){
                     //player 2
-                    TankManager.addTank(new Player(new Vector2(385, 5), true));
                     GameScreen.lives2--;
+                    if(GameScreen.lives2 > 0) {
+                        TankManager.addTank(new Player(new Vector2(385, 5), true));
+                    }
                 } else {
                     //player 1
-                    TankManager.addTank(new Player(new Vector2(200, 5), false));
                     GameScreen.lives--;
+                    if(GameScreen.lives > 0) {
+                        TankManager.addTank(new Player(new Vector2(200, 5), false));
+                    }
                 }
             } else {
                 //add to score
@@ -221,43 +237,50 @@ public class Tank {
             base.setPosition(position.x, position.y);
             base.rotate(direction * 90 - base.getRotation());
 
+            inv.setPosition(position.x, position.y);
+            inv.rotate(direction * 90 - inv.getRotation());
+
             batch.begin();
             base.draw(batch);
+            inv.draw(batch);
             batch.end();
 
 
-            renderer.begin(ShapeRenderer.ShapeType.Filled);
-
-
-            if(getXY().getKey() == 0) {
-                renderer.setColor(0.3f, 0.3f, 0.3f, 1);
-                renderer.rect(position.x, position.y - 13, 39, 7);
-
-                if(health/origHealth > 0.7) {
-                    renderer.setColor(Color.GREEN);
-                } else if (health/origHealth < 0.35) {
-                    renderer.setColor(Color.RED);
-                } else {
-                    renderer.setColor(Color.YELLOW);
-                }
-
-                renderer.rect(position.x, position.y - 13, 39 * (health / origHealth), 7);
-            } else {
-                renderer.setColor(0.3f, 0.3f, 0.3f, 1);
-                renderer.rect(position.x, position.y + 45, 39, 7);
-
-                if(health/origHealth > 0.7) {
-                    renderer.setColor(Color.GREEN);
-                } else if (health/origHealth < 0.35) {
-                    renderer.setColor(Color.RED);
-                } else {
-                    renderer.setColor(Color.YELLOW);
-                }
-
-                renderer.rect(position.x, position.y + 45, 39 * (health / origHealth), 7);
-            }
-            renderer.end();
         }
+    }
+
+    public void updateHealth(ShapeRenderer renderer) {
+        renderer.begin(ShapeRenderer.ShapeType.Filled);
+
+
+        if(getXY().getKey() == 0) {
+            renderer.setColor(0.3f, 0.3f, 0.3f, 1);
+            renderer.rect(position.x, position.y - 13, 39, 7);
+
+            if(health/origHealth > 0.7) {
+                renderer.setColor(Color.GREEN);
+            } else if (health/origHealth < 0.35) {
+                renderer.setColor(Color.RED);
+            } else {
+                renderer.setColor(Color.YELLOW);
+            }
+
+            renderer.rect(position.x, position.y - 13, 39 * (health / origHealth), 7);
+        } else {
+            renderer.setColor(0.3f, 0.3f, 0.3f, 1);
+            renderer.rect(position.x, position.y + 45, 39, 7);
+
+            if(health/origHealth > 0.7) {
+                renderer.setColor(Color.GREEN);
+            } else if (health/origHealth < 0.35) {
+                renderer.setColor(Color.RED);
+            } else {
+                renderer.setColor(Color.YELLOW);
+            }
+
+            renderer.rect(position.x, position.y + 45, 39 * (health / origHealth), 7);
+        }
+        renderer.end();
     }
 
     public void updateVel() {
@@ -405,7 +428,7 @@ public class Tank {
             }
 
             //init bullet
-            Bullet b = new Bullet(new Vector2(position.x + 15, position.y + 13), temp, direction, this, damage);
+            Bullet b = new Bullet(new Vector2(position.x + base.getWidth()/2, position.y + base.getHeight()/2), temp, direction, this, damage);
             TankManager.bullets.add(b);
 
             cooldown = cd;
@@ -415,6 +438,18 @@ public class Tank {
                 if(mag == 0) {
                     mag = 5;
                     cooldown = 80;
+                }
+            } else if (gunType == 4) {
+                mag--;
+                if(mag == 0) {
+                    mag = 8;
+                    cooldown = 40;
+                }
+            } else if (gunType == 5) {
+                mag--;
+                if(mag == 0) {
+                    mag = 20;
+                    cooldown = 60;
                 }
             }
         }

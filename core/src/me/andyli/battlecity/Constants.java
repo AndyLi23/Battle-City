@@ -1,6 +1,7 @@
 package me.andyli.battlecity;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -25,6 +26,9 @@ public class Constants {
     public static final int LEVELS = 2;
     public static final int LIVES = 3;
     public static int MODE = 1;
+    public static int GUN_TYPE = 4;
+    public static String COLOR = "pink";
+    public static float playerHealth = 1.5f;
 
     public static void disposeAll() {
         FONT.dispose();

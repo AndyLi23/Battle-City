@@ -43,6 +43,8 @@ public class PointsScreen implements Screen {
 
         Gdx.input.setInputProcessor(this.stage);
 
+        int[] s_scores = scores.clone();
+
 
         //styling--------------------------------------------
         Label.LabelStyle lStyle = new Label.LabelStyle();
@@ -91,23 +93,23 @@ public class PointsScreen implements Screen {
         //------------------
 
         //labels------------------------------------------------------
-        t1 = new Label(scores[0]+"", l2Style);
+        t1 = new Label(s_scores[0]+"", l2Style);
         t1.setAlignment(Align.left);
         t1.setPosition(300, 400);
 
-        t2 = new Label(scores[1]+"", l2Style);
+        t2 = new Label(s_scores[1]+"", l2Style);
         t2.setAlignment(Align.left);
         t2.setPosition(300, 350);
 
-        t3 = new Label(scores[2]+"", l2Style);
+        t3 = new Label(s_scores[2]+"", l2Style);
         t3.setAlignment(Align.left);
         t3.setPosition(300, 300);
 
-        tt = new Label(scores[2]+scores[1]+scores[0]+"", l2Style);
+        tt = new Label(s_scores[2]+s_scores[1]+s_scores[0]+"", l2Style);
         tt.setAlignment(Align.left);
         tt.setPosition(300, 210);
 
-        ttta = new Label(scores[2]+scores[1]+scores[0]+total1+"", l2Style);
+        ttta = new Label(s_scores[2]+s_scores[1]+s_scores[0]+total1+"", l2Style);
         ttta.setAlignment(Align.right);
         ttta.setPosition(300, 180);
 
@@ -123,27 +125,27 @@ public class PointsScreen implements Screen {
         t.setAlignment(Align.left);
         t.setPosition(170, 180);
 
-        t1a = new Label(scores[0]*100+"", l2Style);
+        t1a = new Label(s_scores[0]*100+"", l2Style);
         t1a.setAlignment(Align.right);
         t1a.setPosition(520-t1a.getWidth(), 400);
 
-        t2a = new Label(scores[1]*500+"", l2Style);
+        t2a = new Label(s_scores[1]*500+"", l2Style);
         t2a.setAlignment(Align.right);
         t2a.setPosition(520-t2a.getWidth(), 350);
 
-        t3a = new Label(scores[2]*300+"", l2Style);
+        t3a = new Label(s_scores[2]*300+"", l2Style);
         t3a.setAlignment(Align.right);
         t3a.setPosition(520-t3a.getWidth(), 300);
 
-        ba = new Label(scores[3]*500+"", l2Style);
+        ba = new Label(s_scores[3]*500+"", l2Style);
         ba.setAlignment(Align.right);
         ba.setPosition(520-ba.getWidth(), 240);
 
-        tta = new Label(scores[2]*300+scores[1]*500+scores[0]*100+"", l2Style);
+        tta = new Label(s_scores[2]*300+s_scores[1]*500+s_scores[0]*100+"", l2Style);
         tta.setAlignment(Align.right);
         tta.setPosition(520-tta.getWidth(), 210);
 
-        ttt = new Label(scores[2]*300+scores[1]*500+scores[0]*100+total+"", l2Style);
+        ttt = new Label(s_scores[2]*300+s_scores[1]*500+s_scores[0]*100+total+"", l2Style);
         ttt.setAlignment(Align.right);
         ttt.setPosition(520-ttt.getWidth(), 180);
 
@@ -184,7 +186,7 @@ public class PointsScreen implements Screen {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     dispose();
-                    game.setScreen(new LevelScreen(game, map+1, true, lives, total + scores[2]*300+scores[1]*500+scores[0]*100+scores[3]*500, scores[2]+scores[1]+scores[0]+total1, players, lives2));
+                    game.setScreen(new LevelScreen(game, map+1, true, lives, total + s_scores[2]*300+s_scores[1]*500+s_scores[0]*100+s_scores[3]*500, s_scores[2]+s_scores[1]+s_scores[0]+total1, players, lives2));
                 }
             });
         }

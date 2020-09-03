@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import me.andyli.battlecity.Constants;
 import me.andyli.battlecity.blocks.Ice;
 
 public class Player extends Tank{
@@ -13,7 +14,7 @@ public class Player extends Tank{
 
     public Player(Vector2 position, boolean player1) {
         //init
-        super(position, 2, 0, new Sprite(new Texture(Gdx.files.internal("img/tank1.png"))), 3, 1.5f, -1, null, false);
+        super(position, 2, 0, new Sprite(new Texture(Gdx.files.internal("img/tank1_" + Constants.COLOR + ".png"))), Constants.GUN_TYPE, Constants.playerHealth, -1, null, false);
         this.player1 = player1;
         invulnerable = 100;
     }
@@ -23,12 +24,12 @@ public class Player extends Tank{
         if(invulnerable > 0) {
             //alternating sprites
             if(invulnerable/10 % 2 == 0) {
-                base.setTexture(new Texture(Gdx.files.internal("img/inv1.png")));
+                inv.setTexture(new Texture(Gdx.files.internal("img/inv1.png")));
             } else {
-                base.setTexture(new Texture(Gdx.files.internal("img/inv2.png")));
+                inv.setTexture(new Texture(Gdx.files.internal("img/inv2.png")));
             }
         } else {
-            base.setTexture(new Texture(Gdx.files.internal("img/tank1.png")));
+            inv.setTexture(new Texture(Gdx.files.internal("img/blank.png")));
         }
 
         //user input if this is player 2------------------------------------------------------------
@@ -121,7 +122,7 @@ public class Player extends Tank{
 
         //fire------------------------
         if(player1) {
-            if (gunType == 1) {
+            if (gunType == 4 || gunType == 5) {
                 if (Gdx.input.isKeyPressed(Input.Keys.M)) {
                     fire();
                 }
@@ -131,7 +132,7 @@ public class Player extends Tank{
                 }
             }
         } else {
-            if (gunType == 1) {
+            if (gunType == 4 || gunType == 5) {
                 if (Gdx.input.isKeyPressed(Input.Keys.B)) {
                     fire();
                 }

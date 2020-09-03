@@ -21,7 +21,7 @@ import java.net.URL;
 
 import static com.badlogic.gdx.Gdx.input;
 
-public class MenuScreen implements Screen {
+public class SettingsScreen implements Screen {
 
     private final Stage stage;
     private final Game game;
@@ -29,11 +29,11 @@ public class MenuScreen implements Screen {
     private final ShapeRenderer renderer;
     private Label title, credit;
     private int x, y;
-    private TextButton start, start2, settings;
+    private TextButton start, start2, done;
 
 
 
-    public MenuScreen(final Game game) {
+    public SettingsScreen(final Game game) {
 
         //init
         renderer = new ShapeRenderer();
@@ -73,51 +73,21 @@ public class MenuScreen implements Screen {
 
 
         //graphics----------------------------------------------------------------------------------------
-        title = new Label("Battle\nCity", lStyle);
-        title.setAlignment(Align.center);
-        title.setPosition(400-title.getWidth()/2, 400);
 
-        credit = new Label("Created by Andy Li", l2Style);
-        credit.setAlignment(Align.center);
-        credit.setPosition(400-credit.getWidth()/2, 350);
+        done = new TextButton("Done", tStyle);
+        done.setWidth(200);
+        done.setPosition(400 - done.getWidth() / 2, 60);
 
-        start = new TextButton("1 Player", tStyle);
-        start.setWidth(200);
-        start.setPosition(400 - start.getWidth() / 2, 180);
-
-        start2 = new TextButton("2 Player", tStyle);
-        start2.setWidth(200);
-        start2.setPosition(400 - start2.getWidth() / 2, 120);
-
-        settings = new TextButton("Settings", tStyle);
-        settings.setWidth(200);
-        settings.setPosition(400 - settings.getWidth() / 2, 60);
-
-        start.addListener(new ChangeListener() {
+        done.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 dispose();
-                game.setScreen(new LevelScreen(game, 1, false, Constants.LIVES, 0, 0, 1, Constants.LIVES));
+                game.setScreen(new MenuScreen(game));
             }
         });
 
-        start2.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                dispose();
-                game.setScreen(new LevelScreen(game, 1, false, Constants.LIVES, 0, 0, 2, Constants.LIVES));
-            }
-        });
 
-        settings.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                dispose();
-                game.setScreen(new SettingsScreen(game));
-            }
-        });
-
-        Tools.addActors(stage, title, credit, start, start2, settings);
+        Tools.addActors(stage, done);
         //----------------------------------------------------------------------------------------
 
     }
@@ -129,21 +99,6 @@ public class MenuScreen implements Screen {
         renderer.rect(0, 0, 800, 624);
 
         renderer.end();
-
-
-        //link to github--------------------------------------------
-        x = input.getX();
-        y = input.getY();
-
-        if(x > 400-credit.getWidth()/2 && x < 400+credit.getWidth()/2 && y < 274 && y > 274 - credit.getHeight()) {
-            credit.setColor(Color.LIGHT_GRAY);
-            if(input.isButtonJustPressed(0)) {
-                openWebpage("https://github.com/AndyLi23");
-            }
-        } else {
-            credit.setColor(Color.WHITE);
-        }
-        //-----------------------------------------------------------
 
         stage.act(delta);
         stage.draw();

@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.DelayedRemovalArray;
 import javafx.util.Pair;
 import me.andyli.battlecity.blocks.BlockManager;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class TankManager {
@@ -39,7 +40,7 @@ public class TankManager {
         }
     }
 
-    public void updateTanks(SpriteBatch batch, ShapeRenderer renderer) {
+    public void updateTanks(SpriteBatch batch) {
         //every sixty frames, parse the string------------------------------------------------------
         if(count == 0 && limit > 0) {
 
@@ -82,7 +83,13 @@ public class TankManager {
 
         //update tanks
         for(Tank t : tanks) {
-            t.update(batch, renderer);
+            t.update(batch);
+        }
+    }
+
+    public void updateHealth(ShapeRenderer renderer) {
+        for(Tank t : tanks) {
+            t.updateHealth(renderer);
         }
     }
 

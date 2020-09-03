@@ -156,7 +156,6 @@ public class Brick extends Block {
                             }
                         } else {
                             health[5]-=damage;
-                            Gdx.app.log(damage +"", "");
                             if(health[5] <= 0) {
                                 health[5] = 1;
                                 for (int k = 0; k < 4; ++k) {
