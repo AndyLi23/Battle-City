@@ -96,14 +96,6 @@ public class LevelScreen implements Screen {
             left--;
         }
 
-        //render background
-        renderer.begin(ShapeRenderer.ShapeType.Filled);
-        renderer.setColor(Color.LIGHT_GRAY);
-        renderer.rect(0, 0, 800, 624);
-
-        renderer.end();
-
-
         //switching/selecting level mechanics------------------------------------------------------------------
         if(!timed) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT) || Gdx.input.isKeyJustPressed(Input.Keys.D)) {

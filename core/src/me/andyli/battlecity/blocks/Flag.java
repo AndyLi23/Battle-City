@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import me.andyli.battlecity.screens.GameScreen;
+import me.andyli.battlecity.tanks.Explosion;
 import me.andyli.battlecity.tanks.TankManager;
 import me.andyli.battlecity.utility.Tools;
 
@@ -34,6 +35,9 @@ public class Flag extends Block {
         health--;
         if(health == 0) {
             BlockManager.arr[x][y] = null;
+            //explode itself
+            TankManager.explosions.add(new Explosion(position.add(new Vector2(24, 24)), 2f, 0.3f));
+
             //explode the players
             TankManager.removePlayer();
             TankManager.removePlayer();
