@@ -24,7 +24,7 @@ public class Grass extends Block {
         batch.end();
     }
 
-    public boolean collideBullet(Vector2 r1p1, Vector2 r2p2, int direction) {
+    public boolean collideBullet(Vector2 r1p1, Vector2 r2p2, int direction, float damage) {
         return false;
     }
 

@@ -13,7 +13,7 @@ public class Player extends Tank{
 
     public Player(Vector2 position, boolean player1) {
         //init
-        super(position, 2, 0, new Sprite(new Texture(Gdx.files.internal("img/tank1.png"))), 25, 1, -1, null, false);
+        super(position, 2, 0, new Sprite(new Texture(Gdx.files.internal("img/tank1.png"))), 3, 1, -1, null, false);
         this.player1 = player1;
         invulnerable = 100;
     }
@@ -121,12 +121,24 @@ public class Player extends Tank{
 
         //fire------------------------
         if(player1) {
-            if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
-                fire();
+            if (gunType == 1) {
+                if (Gdx.input.isKeyPressed(Input.Keys.M)) {
+                    fire();
+                }
+            } else {
+                if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
+                    fire();
+                }
             }
         } else {
-            if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
-                fire();
+            if (gunType == 1) {
+                if (Gdx.input.isKeyPressed(Input.Keys.B)) {
+                    fire();
+                }
+            } else {
+                if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
+                    fire();
+                }
             }
         }
         //------------------------------------

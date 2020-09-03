@@ -13,15 +13,17 @@ public class Bullet {
     public Vector2 position, speed, r1p1, r1p2, r2p2;
     public Sprite base;
     public int direction;
+    public float damage;
     private int x1, x2, y1, y2;
     public Tank parent;
 
-    public Bullet(Vector2 position, Vector2 speed, int direction, Tank parent) {
+    public Bullet(Vector2 position, Vector2 speed, int direction, Tank parent, float damage) {
         //initialize
         this.position = position;
         this.speed = speed;
         this.direction = direction;
         this.parent = parent;
+        this.damage = damage;
 
 
         //sprite
@@ -82,7 +84,7 @@ public class Bullet {
                             //subtract from tank health, explode
                             TankManager.explosions.add(new Explosion(new Vector2(position.x + base.getWidth() / 2, position.y + base.getHeight() / 2), 1.5f, 0.3f));
                             if (t.invulnerable == 0) {
-                                t.health--;
+                                t.health-=damage;
                             }
                         }
                     }
@@ -142,28 +144,28 @@ public class Bullet {
         //check for hit------------------------------------------
         if(direction == 0) {
             for(int i = x1; i <= x2; ++i) {
-                if(BlockManager.arr[y2][i] != null && BlockManager.arr[y2][i].collideBullet(r1p1,r1p2, direction)) {
+                if(BlockManager.arr[y2][i] != null && BlockManager.arr[y2][i].collideBullet(r1p1,r1p2, direction, damage)) {
                     TankManager.explosions.add(new Explosion(new Vector2(position.x + base.getWidth()/2, position.y + base.getHeight()/2), 1f, 0.3f));
                     return true;
                 }
             }
         } else if(direction == 2) {
             for(int i = x1; i <= x2; ++i) {
-                if(BlockManager.arr[y1][i] != null && BlockManager.arr[y1][i].collideBullet(r1p1,r1p2, direction)) {
+                if(BlockManager.arr[y1][i] != null && BlockManager.arr[y1][i].collideBullet(r1p1,r1p2, direction, damage)) {
                     TankManager.explosions.add(new Explosion(new Vector2(position.x + base.getWidth()/2, position.y + base.getHeight()/2), 1f, 0.3f));
                     return true;
                 }
             }
         } else if (direction == 1) {
             for(int i = y2; i <= y1; ++i) {
-                if(BlockManager.arr[i][x1] != null && BlockManager.arr[i][x1].collideBullet(r1p1,r1p2, direction)) {
+                if(BlockManager.arr[i][x1] != null && BlockManager.arr[i][x1].collideBullet(r1p1,r1p2, direction, damage)) {
                     TankManager.explosions.add(new Explosion(new Vector2(position.x + base.getWidth()/2, position.y + base.getHeight()/2), 1f, 0.3f));
                     return true;
                 }
             }
         } else if (direction == 3) {
             for(int i = y2; i <= y1; ++i) {
-                if(BlockManager.arr[i][x2] != null && BlockManager.arr[i][x2].collideBullet(r1p1,r1p2, direction)) {
+                if(BlockManager.arr[i][x2] != null && BlockManager.arr[i][x2].collideBullet(r1p1,r1p2, direction, damage)) {
                     TankManager.explosions.add(new Explosion(new Vector2(position.x + base.getWidth()/2, position.y + base.getHeight()/2), 1f, 0.3f));
                     return true;
                 }

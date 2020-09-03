@@ -7,9 +7,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import me.andyli.battlecity.utility.Tools;
 
+import java.util.Arrays;
+
 public class Brick extends Block {
     //16 sprites (to make deleting easier)
     private Sprite[][] sprites;
+    private float[] health = new float[6];
 
     public Brick(Vector2 position, int half, int x, int y) {
         super(position, x, y);
@@ -50,6 +53,10 @@ public class Brick extends Block {
             }
         }
         //--------------------------------------------------------------------------------------------
+
+        for(int i = 0; i < 6; ++i) {
+            health[i] = 1;
+        }
     }
 
     public void update(SpriteBatch batch) {
@@ -77,7 +84,7 @@ public class Brick extends Block {
         return false;
     }
 
-    public boolean collideBullet(Vector2 r1p1, Vector2 r1p2, int direction) {
+    public boolean collideBullet(Vector2 r1p1, Vector2 r1p2, int direction, float damage) {
         //BULLET COLLISION------------------------------------------------------------------------------------------------------------------------------------------
         for(int i = 0; i < 4; ++i) {
             for (int j = 0; j < 4; ++j) {
@@ -85,51 +92,76 @@ public class Brick extends Block {
                 if(sprites[i][j] != null && Tools.collide(r1p1, r1p2, new Vector2(position.x + i*12, position.y + j*12), new Vector2(position.x + i*12+12, position.y + j*12+12))) {
                     if(direction == 1 || direction == 3) {
                         if(j == 0) {
-                            //delete this half (hit two on sides)
-                            sprites[i][0] = null;
-                            sprites[i][1] = null;
+                            health[0]-=damage;
+                            if(health[0] <= 0) {
+                                health[0]=1;
+                                //delete this half (hit two on sides)
+                                sprites[i][0] = null;
+                                sprites[i][1] = null;
 
-                            //delete connected bricks if they exist
-                            if(BlockManager.arr[x+1][y] != null && BlockManager.arr[x+1][y] instanceof Brick) {
-                                ((Brick) BlockManager.arr[x+1][y]).sprites[i][3] = null;
-                                ((Brick) BlockManager.arr[x+1][y]).sprites[i][2] = null;
+                                //delete connected bricks if they exist
+                                if (BlockManager.arr[x + 1][y] != null && BlockManager.arr[x + 1][y] instanceof Brick) {
+                                    ((Brick) BlockManager.arr[x + 1][y]).sprites[i][3] = null;
+                                    ((Brick) BlockManager.arr[x + 1][y]).sprites[i][2] = null;
+                                }
                             }
                         } else if(j == 3) {
-                            //delete this half (hit two on sides)
-                            sprites[i][3] = null;
-                            sprites[i][2] = null;
+                            health[1]-=damage;
+                            if(health[1] <= 0) {
+                                health[1] = 1;
+                                //delete this half (hit two on sides)
+                                sprites[i][3] = null;
+                                sprites[i][2] = null;
 
-                            //delete connected bricks if they exist
-                            if(BlockManager.arr[x-1][y] != null && BlockManager.arr[x-1][y] instanceof Brick) {
-                                ((Brick) BlockManager.arr[x-1][y]).sprites[i][1] = null;
-                                ((Brick) BlockManager.arr[x-1][y]).sprites[i][0] = null;
+                                //delete connected bricks if they exist
+                                if (BlockManager.arr[x - 1][y] != null && BlockManager.arr[x - 1][y] instanceof Brick) {
+                                    ((Brick) BlockManager.arr[x - 1][y]).sprites[i][1] = null;
+                                    ((Brick) BlockManager.arr[x - 1][y]).sprites[i][0] = null;
+                                }
                             }
 
                         } else {
-                            //delete entire layer (hit the middle two)
-                            for (int k = 0; k < 4; ++k) {
-                                sprites[i][k] = null;
+                            health[2]-=damage;
+                            if(health[2] <= 0) {
+                                health[2] = 1;
+                                //delete entire layer (hit the middle two)
+                                for (int k = 0; k < 4; ++k) {
+                                    sprites[i][k] = null;
+                                }
                             }
                         }
                     }
                     if(direction == 0 || direction == 2) {
                         if(i == 0) {
-                            sprites[0][j] = null;
-                            sprites[1][j] = null;
-                            if(BlockManager.arr[x][y-1] != null && BlockManager.arr[x][y-1] instanceof Brick) {
-                                ((Brick) BlockManager.arr[x][y-1]).sprites[3][j] = null;
-                                ((Brick) BlockManager.arr[x][y-1]).sprites[2][j] = null;
+                            health[3]-=damage;
+                            if(health[3] <= 0) {
+                                health[3] = 1;
+                                sprites[0][j] = null;
+                                sprites[1][j] = null;
+                                if (BlockManager.arr[x][y - 1] != null && BlockManager.arr[x][y - 1] instanceof Brick) {
+                                    ((Brick) BlockManager.arr[x][y - 1]).sprites[3][j] = null;
+                                    ((Brick) BlockManager.arr[x][y - 1]).sprites[2][j] = null;
+                                }
                             }
                         } else if(i == 3) {
-                            sprites[2][j] = null;
-                            sprites[3][j] = null;
-                            if(BlockManager.arr[x][y+1] != null && BlockManager.arr[x][y+1] instanceof Brick) {
-                                ((Brick) BlockManager.arr[x][y+1]).sprites[1][j] = null;
-                                ((Brick) BlockManager.arr[x][y+1]).sprites[0][j] = null;
+                            health[4]-=damage;
+                            if(health[4] <= 0) {
+                                health[4] = 1;
+                                sprites[2][j] = null;
+                                sprites[3][j] = null;
+                                if (BlockManager.arr[x][y + 1] != null && BlockManager.arr[x][y + 1] instanceof Brick) {
+                                    ((Brick) BlockManager.arr[x][y + 1]).sprites[1][j] = null;
+                                    ((Brick) BlockManager.arr[x][y + 1]).sprites[0][j] = null;
+                                }
                             }
                         } else {
-                            for (int k = 0; k < 4; ++k) {
-                                sprites[k][j] = null;
+                            health[5]-=damage;
+                            Gdx.app.log(damage +"", "");
+                            if(health[5] <= 0) {
+                                health[5] = 1;
+                                for (int k = 0; k < 4; ++k) {
+                                    sprites[k][j] = null;
+                                }
                             }
                         }
                     }

@@ -28,7 +28,7 @@ public class Block {
         return Tools.collide(r1p1, r1p2, position, position2);
     }
 
-    public boolean collideBullet(Vector2 r1p1, Vector2 r1p2, int direction) {
+    public boolean collideBullet(Vector2 r1p1, Vector2 r1p2, int direction, float damage) {
         //collide with a bullet
         return Tools.collide(r1p1, r1p2, position, position2);
     }

@@ -18,22 +18,21 @@ import me.andyli.battlecity.utility.Tools;
 import java.util.ArrayList;
 
 public class Tank {
-    public int direction, cooldown, cd, health, invulnerable, type, countdown, frozen;
-    public float speed;
+    public int direction, cooldown, gunType, invulnerable, type, countdown, frozen, cd, cur, mag;
+    public float damage, speed, health;
     public Vector2 position, vel;
     public Sprite base;
     public boolean powerup;
     private ArrayList<Pair<Integer, Integer>> path;
-    private int cur;
 
-    public Tank(Vector2 position, float speed, int direction, Sprite base, int cd, int health, int type, ArrayList<Pair<Integer, Integer>> path, boolean powerup) {
+    public Tank(Vector2 position, float speed, int direction, Sprite base, int gunType, int health, int type, ArrayList<Pair<Integer, Integer>> path, boolean powerup) {
         //initialize------------------------
         this.position = position;
         this.speed = speed;
         this.direction = direction;
         this.vel = new Vector2(0, 0);
         updateVel();
-        this.cd = cd;
+        this.gunType = gunType;
         this.type = type;
 
         this.health = health;
@@ -42,6 +41,24 @@ public class Tank {
         base.setPosition(position.x, position.y);
         countdown = 40;
         invulnerable = 0;
+
+        //gun types
+
+        if(gunType == 0) {
+            cd = 60;
+            damage = 1;
+        } else if (gunType == 1) {
+            cd = 8;
+            damage = 0.1f;
+            mag = 5;
+        } else if (gunType == 2) {
+            cd = 40;
+            damage = 0.5f;
+        } else if (gunType == 3) {
+            cd = 30;
+            damage = 1;
+        }
+
 
 
         //if powerup
@@ -109,7 +126,7 @@ public class Tank {
 
 
         //DIE------------------------------------
-        if(health == 0) {
+        if(health <= 0) {
             //explode
             TankManager.explosions.add(new Explosion(new Vector2(position.x + base.getWidth()/2, position.y + base.getHeight()/2), 2f, 0.2f));
             TankManager.delete(this);
@@ -138,7 +155,7 @@ public class Tank {
 
             //big tanks: change skin based on health
             if(type == 1) {
-                base.setTexture(new Texture(Gdx.files.internal("img/tank3"+health+".png")));
+                base.setTexture(new Texture(Gdx.files.internal("img/tank3"+(int)Math.ceil(health)+".png")));
                 if(powerup) {
                     base.setColor(new Color(1, 0.6f, 0.6f, 1));
                 }
@@ -353,11 +370,18 @@ public class Tank {
             }
 
             //init bullet
-            Bullet b = new Bullet(new Vector2(position.x + 15, position.y + 13), temp, direction, this);
+            Bullet b = new Bullet(new Vector2(position.x + 15, position.y + 13), temp, direction, this, damage);
             TankManager.bullets.add(b);
 
-            //restart cooldown
             cooldown = cd;
+
+            if(gunType == 1) {
+                mag--;
+                if(mag == 0) {
+                    mag = 5;
+                    cooldown = 60;
+                }
+            }
         }
     }
 

@@ -71,7 +71,7 @@ public class Iron extends Block {
         return false;
     }
 
-    public boolean collideBullet(Vector2 r1p1, Vector2 r1p2, int direction) {
+    public boolean collideBullet(Vector2 r1p1, Vector2 r1p2, int direction, float damage) {
         //collide but don't delete
         for(int i = 0; i < 2; ++i) {
             for (int j = 0; j < 2; ++j) {

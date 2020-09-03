@@ -31,7 +31,7 @@ public class Flag extends Block {
         batch.end();
     }
 
-    public boolean collideBullet(Vector2 r1p1, Vector2 r1p2, int direction) {
+    public boolean collideBullet(Vector2 r1p1, Vector2 r1p2, int direction, float damage) {
         health--;
         if(health == 0) {
             BlockManager.arr[x][y] = null;
