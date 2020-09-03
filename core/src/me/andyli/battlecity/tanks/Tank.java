@@ -27,7 +27,7 @@ public class Tank {
     private ArrayList<Pair<Integer, Integer>> path;
     private int cur;
 
-    public Tank(Vector2 position, float speed, int direction, Sprite base, int cd, int health, int type, ArrayList<Pair<Integer, Integer>> path) {
+    public Tank(Vector2 position, float speed, int direction, Sprite base, int cd, int health, int type, ArrayList<Pair<Integer, Integer>> path, boolean powerup) {
         this.position = position;
         this.speed = speed;
         this.direction = direction;
@@ -45,8 +45,8 @@ public class Tank {
         countdown = 40;
         invulnerable = 0;
 
-        if(!(this instanceof Player) && Tools.choose(4)) {
-            powerup = true;
+        if(powerup) {
+            this.powerup = true;
             base.setColor(new Color(1, 0.6f, 0.6f, 1));
         }
 

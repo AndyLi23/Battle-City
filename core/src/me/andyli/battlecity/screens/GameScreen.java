@@ -44,6 +44,7 @@ public class GameScreen implements Screen {
     private Label l1, l2, l3, l4, l5;
     public static int[] scores = new int[4];
     public boolean ended;
+    private String ts;
 
 
     public GameScreen(final Game game, int map, int lives, int total, int total1, int players, int lives2) {
@@ -75,19 +76,22 @@ public class GameScreen implements Screen {
                 arr[i] = br.readLine();
             }
 
+            br = new BufferedReader(new FileReader(Gdx.files.internal("plans/" + GameScreen.map + ".txt").file()));
+            left = left2 = Integer.parseInt(br.readLine());
+            ts = br.readLine();
+
         } catch (Exception e) {
             Gdx.app.exit();
         }
 
         blockManager = new BlockManager(arr);
-        tankManager = new TankManager();
+        tankManager = new TankManager(ts);
 
         TankManager.addTank(new Player(new Vector2(200, 5), false));
         if(players == 2) {
             TankManager.addTank(new Player(new Vector2(385, 5), true));
         }
 
-        left = left2 = 3;
         GameScreen.lives = lives;
         GameScreen.lives2 = lives2;
 

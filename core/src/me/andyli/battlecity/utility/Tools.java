@@ -9,7 +9,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Timer;
+import me.andyli.battlecity.blocks.Spawner;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Tools {
@@ -38,6 +40,10 @@ public class Tools {
 
     public static int selectRandom(int[] list) {
         return list[rand.nextInt(list.length)];
+    }
+
+    public static Spawner selectRandom(ArrayList<Spawner> list) {
+        return list.get(rand.nextInt(list.size()));
     }
 
     public static boolean choose(int num) {

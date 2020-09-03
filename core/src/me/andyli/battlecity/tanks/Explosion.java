@@ -35,7 +35,7 @@ public class Explosion {
 
     public void update(SpriteBatch batch) {
         counter++;
-        if(counter % 3 == 0) {
+        if(counter % 5 == 0) {
             base.rotate(rand.nextInt(360));
         }
         if(scale >= max) {

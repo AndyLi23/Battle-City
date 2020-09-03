@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
 import javafx.util.Pair;
+import me.andyli.battlecity.utility.Tools;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -57,6 +58,19 @@ public class BlockManager {
             }
         }
         return false;
+    }
+
+    public static ArrayList<Spawner> getSpawners() {
+        ArrayList<Spawner> spawners = new ArrayList<>();
+        for(Block[] c : arr) {
+            for(Block b : c) {
+                if(b instanceof Spawner) {
+                    spawners.add((Spawner) b);
+                }
+            }
+        }
+
+        return spawners;
     }
 
     public void update(SpriteBatch batch) {
