@@ -3,8 +3,6 @@ package me.andyli.battlecity;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
-import me.andyli.battlecity.screens.GameScreen;
 import me.andyli.battlecity.screens.MenuScreen;
 
 public class Main extends Game {
@@ -13,15 +11,14 @@ public class Main extends Game {
 
 	@Override
 	public void create () {
-
 		game = this;
-
+		//menu screen
 		setScreen(new MenuScreen(game));
 	}
 
 	@Override
 	public void render () {
-		Gdx.gl.glClearColor(0.3f,0.3f,0.3f,1);
+		Gdx.gl.glClearColor(0,0,0,1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		super.render();

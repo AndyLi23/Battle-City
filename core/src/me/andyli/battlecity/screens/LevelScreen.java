@@ -5,21 +5,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import me.andyli.battlecity.Constants;
 import me.andyli.battlecity.utility.Tools;
-
-import java.util.Arrays;
 
 
 public class LevelScreen implements Screen {
@@ -35,27 +29,33 @@ public class LevelScreen implements Screen {
 
     public LevelScreen(final Game game, int map, boolean timed, int lives, int total, int total1, int players, int lives2) {
 
-        renderer = new ShapeRenderer();
-
-        this.lives2 = lives2;
-
+        //import settings--------------------
         this.game = game;
-        this.map = map;
-        this.timed = timed;
 
+        this.map = map;
+
+
+        this.timed = timed;
         this.lives = lives;
+        this.lives2 = lives2;
         this.total = total;
         this.total1 = total1;
         this.players = players;
 
+        left = 120;
+        //----------------------------------------
+
+
+        //initialize
+        renderer = new ShapeRenderer();
         this.batch = new SpriteBatch();
         this.stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()), batch);
 
-        left = 120;
 
         Gdx.input.setInputProcessor(this.stage);
 
 
+        //draw------------------------------------------------------------------
         Label.LabelStyle lStyle = new Label.LabelStyle();
         lStyle.font = Constants.FONT_MEDIUM;
         lStyle.fontColor = Color.BLACK;
@@ -69,6 +69,7 @@ public class LevelScreen implements Screen {
         tStyle.up = Constants.SKIN.getDrawable("button_03");
         tStyle.down = Constants.SKIN.getDrawable("button_02");
         tStyle.fontColor = Color.BLACK;
+
 
         l1 = new Label("LEVEL " + map, lStyle);
         l1.setAlignment(Align.center);
@@ -84,14 +85,18 @@ public class LevelScreen implements Screen {
 
 
         Tools.addActors(stage, l1, l2);
+        //------------------------------------------------------------------
 
     }
 
     @Override
     public void render(float delta) {
+        //countdown (for timed)
         if(left != 0) {
             left--;
         }
+
+        //render background
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.setColor(Color.LIGHT_GRAY);
         renderer.rect(0, 0, 800, 624);
@@ -99,6 +104,7 @@ public class LevelScreen implements Screen {
         renderer.end();
 
 
+        //switching/selecting level mechanics------------------------------------------------------------------
         if(!timed) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT) || Gdx.input.isKeyJustPressed(Input.Keys.D)) {
                 if (map != Constants.LEVELS) {
@@ -120,7 +126,10 @@ public class LevelScreen implements Screen {
         if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || (timed && left == 0)) {
             game.setScreen(new GameScreen(game, map, lives, total, total1, players, lives2));
         }
+        //--------------------------------------------------------------------------------------------------------------
 
+
+        //draw graphics
         l1.setText("LEVEL " + map);
 
         stage.act(delta);

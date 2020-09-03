@@ -2,42 +2,29 @@ package me.andyli.battlecity.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import me.andyli.battlecity.Constants;
-import me.andyli.battlecity.blocks.Block;
-import me.andyli.battlecity.blocks.BlockManager;
-import me.andyli.battlecity.tanks.Player;
-import me.andyli.battlecity.tanks.TankManager;
 import me.andyli.battlecity.utility.Tools;
 
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.net.URL;
-import java.util.Arrays;
 
 import static com.badlogic.gdx.Gdx.input;
 
 public class MenuScreen implements Screen {
 
     private final Stage stage;
-    private static Game game;
+    private final Game game;
     private final SpriteBatch batch;
     private final ShapeRenderer renderer;
     private Label title, credit;
@@ -48,15 +35,17 @@ public class MenuScreen implements Screen {
 
     public MenuScreen(final Game game) {
 
+        //init
         renderer = new ShapeRenderer();
 
-        MenuScreen.game = game;
+        this.game = game;
         this.batch = new SpriteBatch();
         this.stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()), batch);
 
         input.setInputProcessor(this.stage);
 
 
+        //styling----------------------------------------------------------------------------------------
         Label.LabelStyle lStyle = new Label.LabelStyle();
         lStyle.font = Constants.FONT_HUGE;
         lStyle.fontColor = Color.RED;
@@ -79,7 +68,11 @@ public class MenuScreen implements Screen {
         tStyle.up = Constants.SKIN.getDrawable("button_03");
         tStyle.down = Constants.SKIN.getDrawable("button_02");
         tStyle.fontColor = Color.BLACK;
+        //----------------------------------------------------------------------------------------
 
+
+
+        //graphics----------------------------------------------------------------------------------------
         title = new Label("Battle\nCity", lStyle);
         title.setAlignment(Align.center);
         title.setPosition(400-title.getWidth()/2, 400);
@@ -113,6 +106,7 @@ public class MenuScreen implements Screen {
         });
 
         Tools.addActors(stage, title, credit, start, start2);
+        //----------------------------------------------------------------------------------------
 
     }
 
@@ -124,6 +118,8 @@ public class MenuScreen implements Screen {
 
         renderer.end();
 
+
+        //link to github--------------------------------------------
         x = input.getX();
         y = input.getY();
 
@@ -135,6 +131,7 @@ public class MenuScreen implements Screen {
         } else {
             credit.setColor(Color.WHITE);
         }
+        //-----------------------------------------------------------
 
         stage.act(delta);
         stage.draw();
@@ -149,6 +146,7 @@ public class MenuScreen implements Screen {
     }
 
     public static void openWebpage(String urlString) {
+        //open webpage in browser
         try {
             Desktop.getDesktop().browse(new URL(urlString).toURI());
         } catch (Exception e) {

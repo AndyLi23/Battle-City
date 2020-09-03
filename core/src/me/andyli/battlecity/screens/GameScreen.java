@@ -9,11 +9,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -49,52 +46,72 @@ public class GameScreen implements Screen {
 
     public GameScreen(final Game game, int map, int lives, int total, int total1, int players, int lives2) {
 
-        renderer = new ShapeRenderer();
-
+        //scores from previous rounds
         GameScreen.total = total;
         GameScreen.total1 = total1;
 
+        //player mode
         GameScreen.players = players;
 
+        //label style
         Label.LabelStyle lStyle = new Label.LabelStyle();
         lStyle.font = Constants.FONT;
         lStyle.fontColor = Color.BLACK;
 
+        //map, game, spritebatch, stage, renderer
+        renderer = new ShapeRenderer();
         GameScreen.map = map;
         GameScreen.game = game;
         this.batch = new SpriteBatch();
         this.stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()), batch);
 
+        //mouse controls this screen
         Gdx.input.setInputProcessor(this.stage);
 
-        arr = new String[19];
+
+        //INITIALIZE MAP/SPAWNING------------------------------------------------
+
+        //hold the map
+        arr = new String[13];
 
         try {
+            //map
             br = new BufferedReader(new FileReader(Gdx.files.internal("maps/" + GameScreen.map + ".txt").file()));
 
             for(int i = 0; i < 13; ++i) {
                 arr[i] = br.readLine();
             }
 
+            //spawning
             br = new BufferedReader(new FileReader(Gdx.files.internal("plans/" + GameScreen.map + ".txt").file()));
+
+            //number of tanks left
             left = left2 = Integer.parseInt(br.readLine());
             ts = br.readLine();
 
         } catch (Exception e) {
             Gdx.app.exit();
         }
+        //----------------------------------------------------------------
 
+        //blockmanager, tankmanager
         blockManager = new BlockManager(arr);
-        tankManager = new TankManager(ts);
+        tankManager = new TankManager(ts, left);
 
+        //override left = left2 = 5;
+
+        //add player(s)
         TankManager.addTank(new Player(new Vector2(200, 5), false));
         if(players == 2) {
             TankManager.addTank(new Player(new Vector2(385, 5), true));
         }
 
+        //lives
         GameScreen.lives = lives;
         GameScreen.lives2 = lives2;
 
+
+        //how many tanks are left------------------------------------------------
         leftVisual = new Sprite[left];
 
         for(int i = 0 ; i < left/2; ++i) {
@@ -105,7 +122,11 @@ public class GameScreen implements Screen {
             leftVisual[i] = new Sprite(new Texture(Gdx.files.internal("img/tank5.png")));
             leftVisual[i].setPosition(700, 300+(i-(left/2))*23);
         }
+        //--------------------------------------------------------------------------------
 
+
+
+        //side info--------------------------------------------------------------------------------
         l1 = new Label("IP", lStyle);
         l1.setAlignment(Align.left);
         l2 = new Label(lives+"", lStyle);
@@ -129,6 +150,7 @@ public class GameScreen implements Screen {
         l5.setPosition(670, 50);
 
         Tools.addActors(stage, l1, l2, l3, l4, l5);
+        //------------------------------------------------------------------------------------------------
 
     }
 
@@ -140,19 +162,32 @@ public class GameScreen implements Screen {
 
         renderer.end();
 
+        //render game--------------------------------
         blockManager.updateGround(batch);
         tankManager.updateBullets(batch);
         tankManager.updateTanks(batch);
         blockManager.update(batch);
         tankManager.updateExplosions(batch);
         blockManager.updatePowerups(batch);
+        //------------------------------------------------
 
+
+        //render side menu--------------------------------
         batch.begin();
         for(int i = 0; i < left2+TankManager.getNonPlayers(); ++i) {
             leftVisual[i].draw(batch);
         }
         batch.end();
 
+        l2.setText(""+lives);
+
+        if(players == 2) {
+            l4.setText("" + lives2);
+        }
+        //------------------------------------------------
+
+
+        //check for game end-------------------------
         if(!ended) {
             if (left2 == 0 && TankManager.tanks.size == players && !BlockManager.spawning()) {
                 nextLevel();
@@ -164,26 +199,25 @@ public class GameScreen implements Screen {
                 ended = true;
             }
         }
-
-        l2.setText(""+lives);
-
-        if(players == 2) {
-            l4.setText("" + lives2);
-        }
+        //--------------------------------------------------
 
         stage.act(delta);
         stage.draw();
     }
 
     public static void gameOver() {
+        //in 2 seconds:
         Tools.timer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
+                //clear items
                 TankManager.tanks.clear();
                 TankManager.bullets.clear();
                 TankManager.explosions.clear();
                 BlockManager.arr = new Block[13][13];
                 BlockManager.powerups.clear();
+
+                //change screen
                 game.setScreen(new PointsScreen(game, scores, map, lives, false, true, total, total1, players, lives2));
                 GameScreen.scores = new int[4];
             }
@@ -191,18 +225,22 @@ public class GameScreen implements Screen {
     }
 
     public static void nextLevel() {
+        //in 2 seconds:
         Tools.timer.scheduleTask(new Timer.Task() {
              @Override
              public void run() {
+                 //clear items
                  TankManager.tanks.clear();
                  TankManager.bullets.clear();
                  TankManager.explosions.clear();
                  BlockManager.arr = new Block[13][13];
                  BlockManager.powerups.clear();
+
+                 //win
                  if(GameScreen.map == Constants.LEVELS) {
                      game.setScreen(new PointsScreen(game, scores, map, lives, true, false, total, total1, players, lives2));
                  } else {
-                     //game.setScreen(new GameScreen(game, map + 1, lives));
+                     //next level
                      game.setScreen(new PointsScreen(game, scores, map, lives, false, false, total, total1, players, lives2));
                  }
                  GameScreen.scores = new int[4];

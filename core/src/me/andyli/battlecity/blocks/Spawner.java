@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import javafx.util.Pair;
 import me.andyli.battlecity.screens.GameScreen;
-import me.andyli.battlecity.tanks.TankManager;
 import me.andyli.battlecity.utility.Tools;
 
 import java.util.ArrayList;
@@ -17,42 +16,41 @@ public class Spawner extends Block {
     private Sprite base;
     private boolean spawning = false;
     public int counter, tankType;
-    private Vector2 pos;
-    private int[] list;
     ArrayList<Pair<Integer, Integer>> path;
     private boolean powerup;
 
     public Spawner(Vector2 position, int i, int j) {
         super(position, i, j);
-        if(j == 0) {
-            list = new int[]{2, 3};
-        } else if (j == 12) {
-            list = new int[]{1, 2};
-        } else {
-            list = new int[]{1, 2, 3};
-        }
 
         base = new Sprite(new Texture(Gdx.files.internal("img/spawner.png")));
         base.setPosition(position.x+1, position.y+1);
     }
 
     public void update(SpriteBatch batch) {
+        //SPAWNING---------------------------------------------------------------------------------------------------------
         if(spawning) {
+            //coundown to spawn
             counter--;
             if (counter == 0) {
+                //SPAWN-----------------------------------
+                //one less tank in level
                 GameScreen.left2--;
-                int dir = Tools.selectRandom(list);
-                pos = new Vector2(position.x, position.y);
-                path = BlockManager.getPath(x, y);
-                GameScreen.tankManager.addTank(tankType, pos, dir, path, powerup);
-                spawning = false;
 
+                //generate path for tank
+                path = BlockManager.getPath(x, y);
+                GameScreen.tankManager.addTank(tankType, new Vector2(position.x, position.y), 0, path, powerup);
+                spawning = false;
+                //-----------------------------------
+
+            //draw based on time (flickering)-----------------------------------
             } else if((counter/10)%2 == 0) {
                 base.setTexture(new Texture(Gdx.files.internal("img/spawner1.png")));
             } else if ((counter/10)%2 == 1) {
                 base.setTexture(new Texture(Gdx.files.internal("img/spawner2.png")));
             }
+            //----------------------------------------------------------------------
 
+        //----------------------------------------------------------------------------------------------------------------
         } else {
             base.setTexture(new Texture(Gdx.files.internal("img/spawner.png")));
         }
@@ -71,6 +69,7 @@ public class Spawner extends Block {
     }
 
     public void spawn(int tankType, boolean powerup) {
+        //spawn tank
         spawning = true;
         counter = 80;
         this.powerup = powerup;

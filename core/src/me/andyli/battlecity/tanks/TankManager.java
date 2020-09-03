@@ -19,54 +19,81 @@ public class TankManager {
     public String ts;
     public int count;
     public int cur;
+    public int limit;
 
-    public TankManager(String ts) {
+    public TankManager(String ts, int limit) {
+        //init
         this.ts = ts;
         count = 0;
         cur = 0;
+
+        //limit of tanks
+        this.limit = limit;
     }
 
     public void updateBullets(SpriteBatch batch) {
+        //update bullets
         for(Bullet b : bullets) {
             b.update(batch);
         }
     }
 
     public void updateTanks(SpriteBatch batch) {
-        //Gdx.app.log(count+"", "");
-        if(count == 0) {
+        //every sixty frames, parse the string------------------------------------------------------
+        if(count == 0 && limit > 0) {
+
+            //if not blank
             if(ts.charAt(cur) != 'O') {
+                //if powerup tank
                 if(ts.charAt(cur) == 'X') {
+                    //add tank of type
                     addTank(Integer.parseInt(String.valueOf(ts.charAt(cur+1))), true, ts.charAt(cur+2)-65);
                     cur++;
                 } else {
+                    //add tank of type
                     addTank(Integer.parseInt(String.valueOf(ts.charAt(cur))), false, ts.charAt(cur+1)-65);
                 }
+
+                //move current position in string
                 cur++;
+
+                //one more tank
+                limit--;
             }
+
+            //move current position in string if "O"
             cur++;
+
+            //reset count
             count = 60;
         }
 
+        //countdown
         count--;
+        //------------------------------------------------------------------------------------------
 
 
+        //delete tank (prevents visual glitch)
         if(toBeDeleted != null) {
             tanks.removeValue(toBeDeleted, true);
             toBeDeleted = null;
         }
+
+        //update tanks
         for(Tank t : tanks) {
             t.update(batch);
         }
     }
 
     public void updateExplosions(SpriteBatch batch) {
+        //update explosions
         for(Explosion e : explosions) {
             e.update(batch);
         }
     }
 
     public static int getNonPlayers() {
+        //get how many non player tanks there are
         int ans = 0;
         for(Tank t : tanks) {
             if(!(t instanceof Player)) {
@@ -77,19 +104,13 @@ public class TankManager {
     }
 
     public static void delete(Tank t) {
+        //delete on next frame
         toBeDeleted = t;
     }
 
-    public static boolean containsPlayer() {
-        for(Tank t : tanks) {
-            if(t instanceof Player) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     public void addTank(int type, Vector2 position, int direction, ArrayList<Pair<Integer, Integer>> path, boolean powerup) {
+        //add a tank of type
         if(type == 0) {
             tanks.add(new Tank(position, 1.5f, direction, new Sprite(new Texture(Gdx.files.internal("img/tank2.png"))), 50, 1, type, path, powerup));
         } else if(type == 1) {
@@ -100,11 +121,12 @@ public class TankManager {
     }
 
     public void addTank(int tankType, boolean powerup, int s) {
-        Gdx.app.log("spawning", "");
+        //set spawner to spawn a tank of a type
         BlockManager.getSpawners().get(s).spawn(tankType, powerup);
     }
 
     public static void removePlayer() {
+        //remove a player
         for(Tank t : tanks) {
             if(t instanceof Player) {
                 explosions.add(new Explosion(t.position.add(new Vector2(20, 20)), 2f, 0.1f));
@@ -114,6 +136,7 @@ public class TankManager {
     }
 
     public static void addTank(Tank t) {
+        //add already initialized tank
         tanks.add(t);
     }
 }

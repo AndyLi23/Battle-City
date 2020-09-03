@@ -32,8 +32,9 @@ public class PointsScreen implements Screen {
 
     public PointsScreen(final Game game, int[] scores, int map, int lives, boolean win, boolean lose, int total, int total1, int players, int lives2) {
 
-        renderer = new ShapeRenderer();
 
+        //initialize
+        renderer = new ShapeRenderer();
 
         this.game = game;
         this.batch = new SpriteBatch();
@@ -43,6 +44,7 @@ public class PointsScreen implements Screen {
         Gdx.input.setInputProcessor(this.stage);
 
 
+        //styling--------------------------------------------
         Label.LabelStyle lStyle = new Label.LabelStyle();
         lStyle.font = Constants.FONT_LARGE2;
         lStyle.fontColor = Color.RED;
@@ -59,6 +61,18 @@ public class PointsScreen implements Screen {
         l4Style.font = Constants.FONT_MEDIUM;
         l4Style.fontColor = Color.WHITE;
 
+        TextButton.TextButtonStyle tStyle = new TextButton.TextButtonStyle();
+        tStyle.font = Constants.FONT;
+        tStyle.up = Constants.SKIN.getDrawable("button_03");
+        tStyle.down = Constants.SKIN.getDrawable("button_02");
+        tStyle.fontColor = Color.BLACK;
+        //------------------------------------------------------
+
+
+
+        //GRAPHICS------------------------------------------------------------------------------------------
+
+        //title------------------
         if(win) {
             l1 = new Label("You Win!", l3Style);
             l2 = new Label(map+" Levels Completed", l4Style);
@@ -74,13 +88,9 @@ public class PointsScreen implements Screen {
         l1.setPosition(400-l1.getWidth()/2, 520);
 
         l2.setPosition(400-l2.getWidth()/2, 485);
+        //------------------
 
-        TextButton.TextButtonStyle tStyle = new TextButton.TextButtonStyle();
-        tStyle.font = Constants.FONT;
-        tStyle.up = Constants.SKIN.getDrawable("button_03");
-        tStyle.down = Constants.SKIN.getDrawable("button_02");
-        tStyle.fontColor = Color.BLACK;
-
+        //labels------------------------------------------------------
         t1 = new Label(scores[0]+"", l2Style);
         t1.setAlignment(Align.left);
         t1.setPosition(300, 400);
@@ -137,7 +147,10 @@ public class PointsScreen implements Screen {
         ttt.setAlignment(Align.right);
         ttt.setPosition(520-ttt.getWidth(), 180);
 
+        //------------------------------------------------------
 
+
+        //tank sprites------------------
         t1s = new Sprite(new Texture(Gdx.files.internal("img/tank2.png")));
         t1s.setCenter(400, 415);
 
@@ -146,7 +159,10 @@ public class PointsScreen implements Screen {
 
         t3s = new Sprite(new Texture(Gdx.files.internal("img/tank4.png")));
         t3s.setCenter(400, 315);
+        //------------------------------------
 
+
+        //buttons------------------------------------
         if(win || lose) {
             playagain = new TextButton("Play Again", tStyle);
             playagain.setWidth(200);
@@ -184,14 +200,17 @@ public class PointsScreen implements Screen {
                 game.setScreen(new MenuScreen(game));
             }
         });
+        //------------------------------------------------------
 
 
         Tools.addActors(stage, l1, l2, playagain, t1, t2, t3, t1a, t2a, t3a, tt, tta, ttt, t, ot, ttta, menu, b, ba);
+        //------------------------------------------------------------------------------------------------------------
 
     }
 
     @Override
     public void render(float delta) {
+        //render background and dividing line
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.setColor(Color.BLACK);
         renderer.rect(0, 0, 800, 624);
@@ -201,6 +220,8 @@ public class PointsScreen implements Screen {
 
         renderer.end();
 
+
+        //draw sprites
         batch.begin();
         t1s.draw(batch);
         t2s.draw(batch);

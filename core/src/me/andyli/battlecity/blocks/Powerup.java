@@ -16,7 +16,7 @@ public class Powerup extends Block{
 
         super(new Vector2(0, 0), 0, 0);
 
-
+        //get a random reachable position----------------------------------------------------------------------
         while(true) {
             position = new Vector2(Tools.random(586), Tools.random(586));
             position2 = new Vector2(position.x + 39, position.y + 39);
@@ -35,11 +35,14 @@ public class Powerup extends Block{
                 break;
             }
         }
+        //---------------------------------------------------------------------------------------------------------
 
         this.type = type;
 
-        left = 300+ Tools.random(200);
+        //set time left
+        left = 500+ Tools.random(200);
 
+        //draw based on type
         if(type == 0) {
             base = new Sprite(new Texture(Gdx.files.internal("img/helmet.png")));
         } else if(type == 1) {
@@ -55,8 +58,10 @@ public class Powerup extends Block{
     }
 
     public void update(SpriteBatch batch) {
+        //countdown
         left--;
 
+        //remove after some time
         if(left == 0) {
             BlockManager.deletePowerup(this);
         }

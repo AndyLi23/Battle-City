@@ -22,12 +22,12 @@ public class Tank {
     public float speed;
     public Vector2 position, vel;
     public Sprite base;
-    private int[] list;
     public boolean powerup;
     private ArrayList<Pair<Integer, Integer>> path;
     private int cur;
 
     public Tank(Vector2 position, float speed, int direction, Sprite base, int cd, int health, int type, ArrayList<Pair<Integer, Integer>> path, boolean powerup) {
+        //initialize------------------------
         this.position = position;
         this.speed = speed;
         this.direction = direction;
@@ -38,29 +38,32 @@ public class Tank {
 
         this.health = health;
 
-        list = new int[]{0,1,2,3};
-
         this.base = base;
         base.setPosition(position.x, position.y);
         countdown = 40;
         invulnerable = 0;
 
+
+        //if powerup
         if(powerup) {
             this.powerup = true;
+            //tint red
             base.setColor(new Color(1, 0.6f, 0.6f, 1));
         }
 
+        //path and future grid
         this.path = path;
         this.cur = 1;
 
-        Gdx.app.log(path+"", "");
-
+        //update direction if given path
         if(path != null) {
             updateDirection(0);
         }
+        //------------------------------------
     }
 
     public void updateDirection(int cur) {
+        //update direction based on next grid in path
         if(path.get(cur).getKey() > path.get(cur+1).getKey()) {
             direction = 0;
         }
@@ -76,19 +79,21 @@ public class Tank {
     }
 
     public Pair<Integer, Integer> getXY() {
+        //get what grid the left corner is in
         int y1 = 12-((int) position.y / 48);
         int x1 = (int) position.x / 48;
         return new Pair<>(y1, x1);
     }
 
     public Pair<Integer, Integer> getXY2() {
+        //get what grid the right corner is in
         int y1 = 12-((int) (position.y+39) / 48);
         int x1 = (int) (position.x+39) / 48;
         return new Pair<>(y1, x1);
     }
 
     public void update(SpriteBatch batch) {
-
+        //countdown------------
         if(frozen > 0) {
             frozen--;
         }
@@ -100,26 +105,38 @@ public class Tank {
         if(countdown > 0) {
             countdown--;
         }
+        //------------------------
 
+
+        //DIE------------------------------------
         if(health == 0) {
+            //explode
             TankManager.explosions.add(new Explosion(new Vector2(position.x + base.getWidth()/2, position.y + base.getHeight()/2), 2f, 0.2f));
             TankManager.delete(this);
+
+            //spawn new player
             if(this instanceof Player) {
                 if(((Player) this).player1){
+                    //player 2
                     TankManager.addTank(new Player(new Vector2(385, 5), true));
                     GameScreen.lives2--;
                 } else {
+                    //player 1
                     TankManager.addTank(new Player(new Vector2(200, 5), false));
                     GameScreen.lives--;
                 }
             } else {
+                //add to score
                 GameScreen.scores[type]++;
             }
+            //add powerup
             if(powerup) {
                 BlockManager.addPowerup(new Powerup(Tools.random(4)));
             }
+        //------------------------------------
         } else {
 
+            //big tanks: change skin based on health
             if(type == 1) {
                 base.setTexture(new Texture(Gdx.files.internal("img/tank3"+health+".png")));
                 if(powerup) {
@@ -128,32 +145,44 @@ public class Tank {
             }
 
 
+            //firing cooldown
             if (cooldown > 0) {
                 cooldown--;
             }
 
+
+            //update direction and velocity
             takeInput();
 
             updateVel();
 
 
-            if(collide(direction) != null) {
+            //collision mechanics------------------------------------------------
+
+
+            //check for powerup collisions
+            if (this instanceof Player) {
+                collidePowerup();
+            }
+
+            //already stuck in block
+            if((collideTank() || (collide(direction) != null && !(collide(direction) instanceof Ice)))) {
                 position.add(vel);
+
             } else {
 
+                //move position if not frozen
                 if (frozen == 0) {
                     position.add(vel);
                 }
 
-                if (this instanceof Player) {
-                    collidePowerup();
-                }
-
+                //prevent from colliding with block
                 if ((collideTank() || (collide(direction) != null && !(collide(direction) instanceof Ice)))) {
                     position.sub(vel);
                 }
             }
 
+            //keep in game area
             if (position.x < 0) {
                 position.x = 0;
             }
@@ -166,7 +195,10 @@ public class Tank {
             if (position.y > 585) {
                 position.y = 585;
             }
+            //------------------------------------------------------------------------
 
+
+            //move sprite
             base.setPosition(position.x, position.y);
             base.rotate(direction * 90 - base.getRotation());
 
@@ -177,6 +209,7 @@ public class Tank {
     }
 
     public void updateVel() {
+        //update velocity based on direction
         if (direction == 0) {
             vel.x = 0;
             vel.y = speed;
@@ -196,22 +229,29 @@ public class Tank {
     }
 
     public void freeze() {
-        frozen = 400;
+        //freeze for 400 frames
+        frozen = 300;
     }
 
     public Block collide(int direction) {
+        //get grid position of two corners
         int y1 = 12-((int) position.y / 48);
         int y2 = 12-((int) (position.y+39)/48);
         int x1 = (int) position.x / 48;
         int x2 = (int) (position.x+39)/48;
 
+        //get positions
         Vector2 r1p1 = new Vector2(position.x, position.y);
         Vector2 r1p2 = new Vector2(position.x+39, position.y+39);
 
+
+        //out of game area
         if(y1 == -1 || x1 == 13 || y2 == -1 || x2 == 13) {
             return new Block(new Vector2(0, 0), 0, 0);
         }
 
+
+        //check for block collision------------------------------------------------------
         if(direction == 0) {
             for(int i = x1; i <= x2; ++i) {
                 if(BlockManager.arr[y2][i] != null && BlockManager.arr[y2][i].collideTank(r1p1,r1p2)) {
@@ -237,6 +277,7 @@ public class Tank {
                 }
             }
         }
+        //------------------------------------------------------------------------
 
 
 
@@ -247,21 +288,32 @@ public class Tank {
         Vector2 r1p1 = new Vector2(position.x, position.y);
         Vector2 r1p2 = new Vector2(position.x+39, position.y+39);
 
+        //check for powerup collision
         for(Powerup p : BlockManager.powerups) {
             if(p.collideTank(r1p1, r1p2)) {
+
+                //extra life
                 if(p.type == 3) {
                     if(((Player) this).player1) {
                         GameScreen.lives2++;
                     } else {
                         GameScreen.lives++;
                     }
+
+                //invulnerable
                 } else if (p.type == 0) {
                     invulnerable += 500;
+
+                //iron home
                 } else if (p.type == 2) {
                     BlockManager.changeToIron();
+
+                //add 500 score
                 } else {
                     GameScreen.scores[3]++;
                 }
+
+                //remove powerup
                 BlockManager.deletePowerup(p);
             }
         }
@@ -271,6 +323,7 @@ public class Tank {
         Vector2 r1p1 = new Vector2(position.x, position.y);
         Vector2 r1p2 = new Vector2(position.x+39, position.y+39);
 
+        //check for any collisions
         for(int i = 0; i < TankManager.tanks.size; ++i) {
             if(!TankManager.tanks.get(i).equals(this)) {
                 Vector2 r2p2 = new Vector2(TankManager.tanks.get(i).position.x + 39, TankManager.tanks.get(i).position.y + 39);
@@ -284,7 +337,10 @@ public class Tank {
 
     public void fire() {
 
+        //cooldown
         if(cooldown == 0) {
+
+            //velocity of bullet
             Vector2 temp;
             if (direction == 0) {
                 temp = new Vector2(0, 10);
@@ -295,16 +351,22 @@ public class Tank {
             } else {
                 temp = new Vector2(10, 0);
             }
+
+            //init bullet
             Bullet b = new Bullet(new Vector2(position.x + 15, position.y + 13), temp, direction, this);
             TankManager.bullets.add(b);
+
+            //restart cooldown
             cooldown = cd;
         }
     }
 
     public void takeInput() {
 
+        //HARD MODE------------------------------------------------------
         if(Constants.MODE == 1) {
 
+            //if on current block in path, update direction to the next path
             if ((path.get(cur).getKey().equals(getXY().getKey()) && path.get(cur).getValue().equals(getXY().getValue())) && path.get(cur).getKey().equals(getXY2().getKey()) && path.get(cur).getValue().equals(getXY2().getValue())) {
                 if (cur != path.size() - 1) {
                     updateDirection(cur);
@@ -312,21 +374,28 @@ public class Tank {
                 }
             }
 
+            //fire if possible
             fire();
+        //------------------------------------------------------------------------
 
+
+        //EASY MODE------------------------------------------------------
         } else {
 
             if(countdown == 0) {
+                //randomly switch direction
                 if (Tools.choose(60)) {
-                    direction = Tools.selectRandom(list);
+                    direction = Tools.random(4);
                 }
 
+                //randomly fire
                 if (Tools.choose(10)) {
                     fire();
                 }
             }
 
         }
+        //------------------------------------------------------
 
 
 
