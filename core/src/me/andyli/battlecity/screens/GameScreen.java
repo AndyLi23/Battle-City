@@ -165,7 +165,7 @@ public class GameScreen implements Screen {
         //render game--------------------------------
         blockManager.updateGround(batch);
         tankManager.updateBullets(batch);
-        tankManager.updateTanks(batch);
+        tankManager.updateTanks(batch, renderer);
         blockManager.update(batch);
         tankManager.updateExplosions(batch);
         blockManager.updatePowerups(batch);

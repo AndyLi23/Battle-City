@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
 import javafx.util.Pair;
@@ -38,7 +39,7 @@ public class TankManager {
         }
     }
 
-    public void updateTanks(SpriteBatch batch) {
+    public void updateTanks(SpriteBatch batch, ShapeRenderer renderer) {
         //every sixty frames, parse the string------------------------------------------------------
         if(count == 0 && limit > 0) {
 
@@ -81,7 +82,7 @@ public class TankManager {
 
         //update tanks
         for(Tank t : tanks) {
-            t.update(batch);
+            t.update(batch, renderer);
         }
     }
 
@@ -112,7 +113,7 @@ public class TankManager {
     public void addTank(int type, Vector2 position, int direction, ArrayList<Pair<Integer, Integer>> path, boolean powerup) {
         //add a tank of type
         if(type == 0) {
-            tanks.add(new Tank(position, 1.5f, direction, new Sprite(new Texture(Gdx.files.internal("img/tank2.png"))), 0, 1, type, path, powerup));
+            tanks.add(new Tank(position, 1.5f, direction, new Sprite(new Texture(Gdx.files.internal("img/tank2.png"))), 0, 1.5f, type, path, powerup));
         } else if(type == 1) {
             tanks.add(new Tank(position, 0.8f, direction, new Sprite(new Texture(Gdx.files.internal("img/tank34.png"))), 1, 4, type, path, powerup));
         } else if(type == 2) {

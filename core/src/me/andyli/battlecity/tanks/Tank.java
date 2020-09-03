@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import javafx.util.Pair;
 import me.andyli.battlecity.Constants;
@@ -19,13 +20,13 @@ import java.util.ArrayList;
 
 public class Tank {
     public int direction, cooldown, gunType, invulnerable, type, countdown, frozen, cd, cur, mag;
-    public float damage, speed, health;
+    public float damage, speed, health, origHealth;
     public Vector2 position, vel;
     public Sprite base;
     public boolean powerup;
     private ArrayList<Pair<Integer, Integer>> path;
 
-    public Tank(Vector2 position, float speed, int direction, Sprite base, int gunType, int health, int type, ArrayList<Pair<Integer, Integer>> path, boolean powerup) {
+    public Tank(Vector2 position, float speed, int direction, Sprite base, int gunType, float health, int type, ArrayList<Pair<Integer, Integer>> path, boolean powerup) {
         //initialize------------------------
         this.position = position;
         this.speed = speed;
@@ -36,6 +37,7 @@ public class Tank {
         this.type = type;
 
         this.health = health;
+        this.origHealth = health;
 
         this.base = base;
         base.setPosition(position.x, position.y);
@@ -109,7 +111,7 @@ public class Tank {
         return new Pair<>(y1, x1);
     }
 
-    public void update(SpriteBatch batch) {
+    public void update(SpriteBatch batch, ShapeRenderer renderer) {
         //countdown------------
         if(frozen > 0) {
             frozen--;
@@ -222,6 +224,39 @@ public class Tank {
             batch.begin();
             base.draw(batch);
             batch.end();
+
+
+            renderer.begin(ShapeRenderer.ShapeType.Filled);
+
+
+            if(getXY().getKey() == 0) {
+                renderer.setColor(0.3f, 0.3f, 0.3f, 1);
+                renderer.rect(position.x, position.y - 13, 39, 7);
+
+                if(health/origHealth > 0.7) {
+                    renderer.setColor(Color.GREEN);
+                } else if (health/origHealth < 0.35) {
+                    renderer.setColor(Color.RED);
+                } else {
+                    renderer.setColor(Color.YELLOW);
+                }
+
+                renderer.rect(position.x, position.y - 13, 39 * (health / origHealth), 7);
+            } else {
+                renderer.setColor(0.3f, 0.3f, 0.3f, 1);
+                renderer.rect(position.x, position.y + 45, 39, 7);
+
+                if(health/origHealth > 0.7) {
+                    renderer.setColor(Color.GREEN);
+                } else if (health/origHealth < 0.35) {
+                    renderer.setColor(Color.RED);
+                } else {
+                    renderer.setColor(Color.YELLOW);
+                }
+
+                renderer.rect(position.x, position.y + 45, 39 * (health / origHealth), 7);
+            }
+            renderer.end();
         }
     }
 
@@ -379,7 +414,7 @@ public class Tank {
                 mag--;
                 if(mag == 0) {
                     mag = 5;
-                    cooldown = 60;
+                    cooldown = 80;
                 }
             }
         }

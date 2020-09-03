@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import javafx.util.Pair;
+import me.andyli.battlecity.Constants;
 import me.andyli.battlecity.screens.GameScreen;
 import me.andyli.battlecity.utility.Tools;
 
@@ -37,7 +38,9 @@ public class Spawner extends Block {
                 GameScreen.left2--;
 
                 //generate path for tank
-                path = BlockManager.getPath(x, y);
+                if(Constants.MODE == 1) {
+                    path = BlockManager.getPath(x, y);
+                }
                 GameScreen.tankManager.addTank(tankType, new Vector2(position.x, position.y), 0, path, powerup);
                 spawning = false;
                 //-----------------------------------

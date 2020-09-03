@@ -23,7 +23,7 @@ public class Constants {
 
     //game settings
     public static final int LEVELS = 2;
-    public static final int LIVES = 30;
+    public static final int LIVES = 3;
     public static int MODE = 1;
 
     public static void disposeAll() {
