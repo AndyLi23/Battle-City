@@ -122,24 +122,12 @@ public class Player extends Tank{
 
         //fire------------------------
         if(player1) {
-            if (gunType == 4 || gunType == 5) {
-                if (Gdx.input.isKeyPressed(Input.Keys.M)) {
-                    fire();
-                }
-            } else {
-                if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
-                    fire();
-                }
+            if (Gdx.input.isKeyPressed(Input.Keys.M)) {
+                fire();
             }
         } else {
-            if (gunType == 4 || gunType == 5) {
-                if (Gdx.input.isKeyPressed(Input.Keys.B)) {
-                    fire();
-                }
-            } else {
-                if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
-                    fire();
-                }
+            if (Gdx.input.isKeyPressed(Input.Keys.B)) {
+                fire();
             }
         }
         //------------------------------------

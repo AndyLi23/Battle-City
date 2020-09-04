@@ -10,6 +10,7 @@ import me.andyli.battlecity.utility.Tools;
 public class Constants {
 
     //fonts
+    public static final BitmapFont FONT_SMALL = Tools.renderFont("font/joystick.ttf", 14);
     public static final BitmapFont FONT = Tools.renderFont("font/joystick.ttf", 20);
     public static final BitmapFont FONT_HUGE = Tools.renderFont("font/joystick.ttf", 80);
     public static final BitmapFont FONT_LARGE = Tools.renderFont("font/joystick.ttf", 50);
@@ -18,17 +19,17 @@ public class Constants {
 
     //skins
     public static final TextureAtlas ATLAS = new TextureAtlas(Gdx.files.internal("skin/ui-red.atlas"));
-    public static final TextureAtlas ATLAS_ALTERNATE = new TextureAtlas(Gdx.files.internal("skin/ui-blue.atlas"));
+    public static final TextureAtlas ATLAS_ALTERNATE = new TextureAtlas(Gdx.files.internal("skin/ui-gray.atlas"));
     public static final Skin SKIN = new Skin(ATLAS);
     public static final Skin SKIN_ALTERNATE = new Skin(ATLAS_ALTERNATE);
 
     //game settings
     public static final int LEVELS = 2;
     public static final int LIVES = 3;
-    public static int MODE = 1;
-    public static int GUN_TYPE = 4;
+    public static int MODE = 0;
+    public static int GUN_TYPE = 3;
     public static String COLOR = "pink";
-    public static float playerHealth = 1.5f;
+    public static float playerHealth = 2f;
 
     public static void disposeAll() {
         FONT.dispose();

@@ -205,7 +205,7 @@ public class GameScreen implements Screen {
                 ended = true;
             }
 
-            if ((players == 1 && lives <= 0) || (lives <= 0 && lives2 <= 0)) {
+            if ((players == 1 && lives < 0) || (lives < 0 && lives2 < 0)) {
                 gameOver();
                 ended = true;
             }

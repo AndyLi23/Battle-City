@@ -60,7 +60,7 @@ public class Tank {
             cd = 40;
             damage = 0.5f;
         } else if (gunType == 3) {
-            cd = 30;
+            cd = 40;
             damage = 1;
         } else if (gunType == 4) {
             cd = 5;
@@ -146,17 +146,16 @@ public class Tank {
 
             //spawn new player
             if(this instanceof Player) {
-                Gdx.app.log(GameScreen.lives+"", GameScreen.lives2+"");
                 if(((Player) this).player1){
                     //player 2
                     GameScreen.lives2--;
-                    if(GameScreen.lives2 > 0) {
+                    if(GameScreen.lives2 >= 0) {
                         TankManager.addTank(new Player(new Vector2(385, 5), true));
                     }
                 } else {
                     //player 1
                     GameScreen.lives--;
-                    if(GameScreen.lives > 0) {
+                    if(GameScreen.lives >= 0) {
                         TankManager.addTank(new Player(new Vector2(200, 5), false));
                     }
                 }

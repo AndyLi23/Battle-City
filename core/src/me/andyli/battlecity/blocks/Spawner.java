@@ -16,7 +16,7 @@ public class Spawner extends Block {
 
     private Sprite base;
     private boolean spawning = false;
-    public int counter, tankType;
+    public int counter, tankType, direction;
     ArrayList<Pair<Integer, Integer>> path;
     private boolean powerup;
 
@@ -41,7 +41,20 @@ public class Spawner extends Block {
                 if(Constants.MODE == 1) {
                     path = BlockManager.getPath(x, y);
                 }
-                GameScreen.tankManager.addTank(tankType, new Vector2(position.x, position.y), 0, path, powerup);
+
+                if(Constants.MODE == 1) {
+                    direction = 0;
+                } else {
+                    if(y == 0) {
+                        direction = Tools.chooseNum(3, 2);
+                    } else if (y == 12) {
+                        direction = Tools.chooseNum(1, 2);
+                    } else {
+                        direction = Tools.chooseNum(1, 2, 3);
+                    }
+                }
+
+                GameScreen.tankManager.addTank(tankType, new Vector2(position.x, position.y), direction, path, powerup);
                 spawning = false;
                 //-----------------------------------
 

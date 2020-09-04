@@ -1,5 +1,6 @@
 package me.andyli.battlecity.blocks;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
@@ -287,6 +288,15 @@ public class BlockManager {
         //current place
         Pair<Integer, Integer> cur = new Pair<>(12, 6);
 
+        ans.add(cur);
+
+        possible.add(new Pair<>(12, 5));
+        possible.add(new Pair<>(12, 7));
+        possible.add(new Pair<>(11, 6));
+
+        cur = Tools.selectRandom(possible);
+        possible.clear();
+
         while(true) {
             //add to path
             ans.add(cur);
@@ -312,7 +322,7 @@ public class BlockManager {
 
 
             //reached destination--------------------------------------------------
-            if(path[i][j] != -1 && min > path[i][j]) {
+            if(path[i][j] != -1 && min >= path[i][j]) {
                 break;
             }
             //---------------------------------------------------------------------
@@ -320,27 +330,26 @@ public class BlockManager {
 
             //pick random minimum cost path----------------------------------------------
 
-            if (Constants.MODE == 1 || ans.size() == 1) {
-                if (get(path, i + 1, j) == min) {
-                    possible.add(new Pair<>(i + 1, j));
-                }
-                if (get(path, i - 1, j) == min) {
-                    possible.add(new Pair<>(i - 1, j));
-                }
-                if (get(path, i, j + 1) == min) {
-                    possible.add(new Pair<>(i, j + 1));
-                }
-                if (get(path, i, j - 1) == min) {
-                    possible.add(new Pair<>(i, j - 1));
-                }
+            if (get(path, i + 1, j) == min) {
+                //possible.add(new Pair<>(i + 1, j));
+                cur = new Pair<>(i + 1, j);
+            }
+            if (get(path, i - 1, j) == min) {
+                //possible.add(new Pair<>(i - 1, j));
+                cur = new Pair<>(i - 1, j);
+            }
+            if (get(path, i, j + 1) == min) {
+                //possible.add(new Pair<>(i, j + 1));
+                cur = new Pair<>(i, j + 1);
+            }
+            if (get(path, i, j - 1) == min) {
+                //possible.add(new Pair<>(i, j - 1));
+                cur = new Pair<>(i, j - 1);
             }
 
 
-            //possible.remove(new Pair<>(11, 5));
-            //possible.remove(new Pair<>(11, 7));
-
-            cur = Tools.selectRandom(possible);
-            possible.clear();
+            //cur = Tools.selectRandom(possible);
+            //possible.clear();
             //-------------------------------------------------------------------------
 
         }

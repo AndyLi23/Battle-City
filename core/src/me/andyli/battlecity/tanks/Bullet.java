@@ -26,7 +26,7 @@ public class Bullet {
 
 
         //sprite
-        if(parent.gunType == 3) {
+        if(parent.gunType == 5) {
             base = new Sprite(new Texture(Gdx.files.internal("img/bullet1.png")));
         } else if (parent.gunType == 1 || parent.gunType == 4) {
             base = new Sprite(new Texture(Gdx.files.internal("img/bullet2.png")));

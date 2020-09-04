@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -58,6 +59,13 @@ public class Tools {
         return rand.nextInt(limit);
     }
 
+    public static int chooseNum(int... nums) {
+        if(nums.length > 0) {
+            return nums[rand.nextInt(nums.length)];
+        }
+        return -1;
+    }
+
 
     //add several actors to a stage
     public static void addActors(Stage stage, Actor... actors) {
@@ -66,6 +74,23 @@ public class Tools {
                 stage.addActor(a);
             }
         }
+    }
+
+    public static void roundedRect(ShapeRenderer renderer, float x, float y, float width, float height, float radius){
+        // Central rectangle
+        renderer.rect(x + radius, y + radius, width - 2*radius, height - 2*radius);
+
+        // Four side rectangles, in clockwise order
+        renderer.rect(x + radius, y, width - 2*radius, radius);
+        renderer.rect(x + width - radius, y + radius, radius, height - 2*radius);
+        renderer.rect(x + radius, y + height - radius, width - 2*radius, radius);
+        renderer.rect(x, y + radius, radius, height - 2*radius);
+
+        // Four arches, clockwise too
+        renderer.arc(x + radius, y + radius, radius, 180f, 90f);
+        renderer.arc(x + width - radius, y + radius, radius, 270f, 90f);
+        renderer.arc(x + width - radius, y + height - radius, radius, 0f, 90f);
+        renderer.arc(x + radius, y + height - radius, radius, 90f, 90f);
     }
 
 }
