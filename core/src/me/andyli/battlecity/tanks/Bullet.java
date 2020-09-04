@@ -53,31 +53,32 @@ public class Bullet {
             //if collide
             if (collideTank() || collideBullet() || collide(direction)) {
                 TankManager.bullets.removeValue(this, true);
+            } else {
+                //update position
+                position.add(speed.x/2, speed.y/2);
+
+                //out of box
+                if(position.x <= 4 || position.x >= 610 || position.y <= 4 || position.y >= 610) {
+                    TankManager.explosions.add(new Explosion(new Vector2(position.x + base.getWidth()/2, position.y + base.getHeight()/2), 1f, 0.3f));
+                    TankManager.bullets.removeValue(this, true);
+                } else {
+
+                    //if collide
+                    if (collideTank() || collideBullet() || collide(direction)) {
+                        TankManager.bullets.removeValue(this, true);
+                    }
+
+                    //update sprite position, draw
+                    base.setCenter(position.x + base.getWidth() / 2, position.y + base.getHeight() / 2);
+
+                    batch.begin();
+                    base.draw(batch);
+                    batch.end();
+                }
             }
 
         }
 
-        //update position
-        position.add(speed.x/2, speed.y/2);
-
-        //out of box
-        if(position.x <= 4 || position.x >= 610 || position.y <= 4 || position.y >= 610) {
-            TankManager.explosions.add(new Explosion(new Vector2(position.x + base.getWidth()/2, position.y + base.getHeight()/2), 1f, 0.3f));
-            TankManager.bullets.removeValue(this, true);
-        } else {
-
-            //if collide
-            if (collideTank() || collideBullet() || collide(direction)) {
-                TankManager.bullets.removeValue(this, true);
-            }
-
-            //update sprite position, draw
-            base.setCenter(position.x + base.getWidth() / 2, position.y + base.getHeight() / 2);
-
-            batch.begin();
-            base.draw(batch);
-            batch.end();
-        }
     }
 
     public boolean collideTank() {

@@ -10,7 +10,6 @@ import com.badlogic.gdx.utils.DelayedRemovalArray;
 import javafx.util.Pair;
 import me.andyli.battlecity.blocks.BlockManager;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 public class TankManager {
@@ -38,6 +37,16 @@ public class TankManager {
         for(Bullet b : bullets) {
             b.update(batch);
         }
+    }
+
+    public ArrayList<Player> getPlayers() {
+        ArrayList<Player> ans = new ArrayList<>();
+        for(Tank t : tanks) {
+            if(t instanceof Player) {
+                ans.add((Player) t);
+            }
+        }
+        return ans;
     }
 
     public void updateTanks(SpriteBatch batch) {

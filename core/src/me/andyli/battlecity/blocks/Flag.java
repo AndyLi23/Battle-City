@@ -13,7 +13,6 @@ import me.andyli.battlecity.utility.Tools;
 public class Flag extends Block {
 
     private Sprite base;
-    private int health;
 
     public Flag(Vector2 position, int i, int j) {
         super(position, i, j);
@@ -21,12 +20,17 @@ public class Flag extends Block {
         base = new Sprite(new Texture(Gdx.files.internal("img/flag.png")));
         base.setPosition(position.x, position.y);
 
-        health = 1;
 
     }
 
     public void update(SpriteBatch batch) {
-        if(health == 0) {
+        batch.begin();
+        base.draw(batch);
+        batch.end();
+    }
+
+    public boolean collideBullet(Vector2 r1p1, Vector2 r1p2, int direction, float damage) {
+        if(Tools.collide(r1p1, r1p2, position, position2)) {
             BlockManager.arr[x][y] = null;
             //explode itself
             TankManager.explosions.add(new Explosion(position.add(new Vector2(24, 24)), 2f, 0.3f));
@@ -37,18 +41,6 @@ public class Flag extends Block {
 
             //game over screen
             GameScreen.gameOver();
-        }
-
-        batch.begin();
-        base.draw(batch);
-        batch.end();
-    }
-
-    public boolean collideBullet(Vector2 r1p1, Vector2 r1p2, int direction, float damage) {
-        if(Tools.collide(r1p1, r1p2, position, position2)) {
-            Gdx.app.log(r1p1+"", r1p2+"");
-            Gdx.app.log(position+"", position2+"");
-            health--;
             return true;
         } else {
             return false;
