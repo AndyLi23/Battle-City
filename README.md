@@ -14,6 +14,12 @@ Don't let them shoot your flag either: if that's hit, the game is over.
 -Levels can be added with a simple .txt file<br>
 -Medium and hard difficulty uses BFS to find the shortest route to your flag, easy uses a randomly generated path
 
+### To Run
+1. Clone the repo. <br>
+2. In the top directory, type: <br>
+`./gradlew build` and `./gradlew run` (MacOS/Linux)<br>
+`gradlew build` and `gradlew run` (Windows)
+
 ### Images
 ![Game](core/assets/img/game.png)
 ![Settings](core/assets/img/settings.png)
