@@ -39,16 +39,6 @@ public class TankManager {
         }
     }
 
-    public ArrayList<Player> getPlayers() {
-        ArrayList<Player> ans = new ArrayList<>();
-        for(Tank t : tanks) {
-            if(t instanceof Player) {
-                ans.add((Player) t);
-            }
-        }
-        return ans;
-    }
-
     public void updateTanks(SpriteBatch batch) {
         //every sixty frames, parse the string------------------------------------------------------
         if(count == 0 && limit > 0) {

@@ -146,7 +146,7 @@ public class BlockManager {
         arr[11][6] = new Iron(new Vector2(288, 48),12, 5, "]");
         arr[11][7] = new Iron(new Vector2(336, 48),12, 5, "$");
 
-        left = 500;
+        left = 1000;
     }
 
 
