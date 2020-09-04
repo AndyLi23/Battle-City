@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 import me.andyli.battlecity.blocks.BlockManager;
 import me.andyli.battlecity.utility.Tools;
@@ -41,8 +42,23 @@ public class Bullet {
     }
 
     public void update(SpriteBatch batch) {
+
+        position.add(speed.x/2, speed.y/2);
+
+        if(position.x <= 4 || position.x >= 610 || position.y <= 4 || position.y >= 610) {
+            TankManager.explosions.add(new Explosion(new Vector2(position.x + base.getWidth()/2, position.y + base.getHeight()/2), 1f, 0.3f));
+            TankManager.bullets.removeValue(this, true);
+        } else {
+
+            //if collide
+            if (collideTank() || collideBullet() || collide(direction)) {
+                TankManager.bullets.removeValue(this, true);
+            }
+
+        }
+
         //update position
-        position.add(this.speed);
+        position.add(speed.x/2, speed.y/2);
 
         //out of box
         if(position.x <= 4 || position.x >= 610 || position.y <= 4 || position.y >= 610) {

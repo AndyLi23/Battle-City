@@ -26,13 +26,6 @@ public class Flag extends Block {
     }
 
     public void update(SpriteBatch batch) {
-        batch.begin();
-        base.draw(batch);
-        batch.end();
-    }
-
-    public boolean collideBullet(Vector2 r1p1, Vector2 r1p2, int direction, float damage) {
-        health--;
         if(health == 0) {
             BlockManager.arr[x][y] = null;
             //explode itself
@@ -45,7 +38,21 @@ public class Flag extends Block {
             //game over screen
             GameScreen.gameOver();
         }
-        return Tools.collide(r1p1, r1p2, position, position2);
+
+        batch.begin();
+        base.draw(batch);
+        batch.end();
+    }
+
+    public boolean collideBullet(Vector2 r1p1, Vector2 r1p2, int direction, float damage) {
+        if(Tools.collide(r1p1, r1p2, position, position2)) {
+            Gdx.app.log(r1p1+"", r1p2+"");
+            Gdx.app.log(position+"", position2+"");
+            health--;
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

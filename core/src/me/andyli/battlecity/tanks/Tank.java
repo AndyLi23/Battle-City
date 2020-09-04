@@ -68,7 +68,7 @@ public class Tank {
             mag = 5;
         } else if (gunType == 5) {
             cd = 3;
-            damage = 0.1f;
+            damage = 0.11f;
             mag = 20;
         }
 
@@ -369,9 +369,9 @@ public class Tank {
                 //extra life
                 if(p.type == 3) {
                     if(((Player) this).player1) {
-                        GameScreen.lives2++;
-                    } else {
                         GameScreen.lives++;
+                    } else {
+                        GameScreen.lives2++;
                     }
 
                 //invulnerable
