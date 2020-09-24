@@ -1,5 +1,7 @@
 # Battle City
-###Created by Andy Li
+
+### Created by Andy Li
+
 A game inspired by the original Battle City (1985 Namco), with some modern variations.<br>
 Written entirely in Java with LibGDX. All images are drawn by the author.
 
