@@ -27,7 +27,7 @@ public class MenuScreen implements Screen {
     private final Game game;
     private final SpriteBatch batch;
     private final ShapeRenderer renderer;
-    private Label title, credit;
+    private Label title, credit, help;
     private int x, y;
     private TextButton start, start2, settings;
 
@@ -62,6 +62,9 @@ public class MenuScreen implements Screen {
         l4Style.font = Constants.FONT_MEDIUM;
         l4Style.fontColor = Color.WHITE;
 
+        Label.LabelStyle l5Style = new Label.LabelStyle();
+        l5Style.font = Constants.FONT_SMALL;
+        l5Style.fontColor = Color.GRAY;
 
         TextButton.TextButtonStyle tStyle = new TextButton.TextButtonStyle();
         tStyle.font = Constants.FONT;
@@ -75,11 +78,15 @@ public class MenuScreen implements Screen {
         //graphics----------------------------------------------------------------------------------------
         title = new Label("Battle\nCity", lStyle);
         title.setAlignment(Align.center);
-        title.setPosition(400-title.getWidth()/2, 400);
+        title.setPosition(400-title.getWidth()/2, 410);
 
         credit = new Label("Created by Andy Li", l2Style);
         credit.setAlignment(Align.center);
-        credit.setPosition(400-credit.getWidth()/2, 350);
+        credit.setPosition(400-credit.getWidth()/2, 370);
+
+        help = new Label("Player 1: WASD to move, B to shoot\nPlayer 2: Arrow keys to move, M to shoot\n\nObjective: Kill all the enemy tanks\n and protect your own flag", l5Style);
+        help.setAlignment(Align.center);
+        help.setPosition(400-help.getWidth()/2, 240);
 
         start = new TextButton("1 Player", tStyle);
         start.setWidth(200);
@@ -117,7 +124,7 @@ public class MenuScreen implements Screen {
             }
         });
 
-        Tools.addActors(stage, title, credit, start, start2, settings);
+        Tools.addActors(stage, title, credit, help, start, start2, settings);
         //----------------------------------------------------------------------------------------
 
     }
@@ -135,7 +142,9 @@ public class MenuScreen implements Screen {
         x = input.getX();
         y = input.getY();
 
-        if(x > 400-credit.getWidth()/2 && x < 400+credit.getWidth()/2 && y < 274 && y > 274 - credit.getHeight()) {
+        Gdx.app.log(y+"", "");
+
+        if(x > 400-credit.getWidth()/2 && x < 400+credit.getWidth()/2 && y < 256 && y > 232) {
             credit.setColor(Color.LIGHT_GRAY);
             if(input.isButtonJustPressed(0)) {
                 openWebpage("https://github.com/AndyLi23");

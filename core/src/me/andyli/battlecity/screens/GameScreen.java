@@ -182,7 +182,7 @@ public class GameScreen implements Screen {
 
         l2.setText(""+lives);
 
-        if(lives <= 0) {
+        if(lives < 0) {
             l2.setPosition(670, 180);
             l2.setText("GAME\nOVER");
         }
@@ -190,7 +190,7 @@ public class GameScreen implements Screen {
         if(players == 2) {
             l4.setText("" + lives2);
 
-            if(lives2 <= 0) {
+            if(lives2 < 0) {
                 l4.setPosition(670, 100);
                 l4.setText("GAME\nOVER");
             }

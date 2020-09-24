@@ -1,11 +1,19 @@
 # Battle City
-A Battle City inspired game made in Java with LibGDX for graphics
+###Created by Andy Li
+A game inspired by the original Battle City (1985 Namco), with some modern variations.<br>
+Written entirely in Java with LibGDX. All images are drawn by the author.
+
+Although development has been concluded for now, bugs may still be present. If there are any, please email the author at andyliqy@gmail.com.
 
 ### How to play
 Defend your flag. Shoot enemy tanks.
 
 Each level has 20 enemy tanks. You only have four lives, so don't let them shoot you!<br>
 Don't let them shoot your flag either: if that's hit, the game is over.
+
+### Controls
+Player 1: WASD to move, B to shoot<br>
+Player 2: Arrow keys to move, M to shoot
 
 ### Features
 -Singleplayer and two players<br>
