@@ -25,6 +25,7 @@ Player 2: Arrow keys to move, M to shoot
 -Medium and hard difficulty uses BFS to find the shortest route to your flag, easy uses a randomly generated path
 
 ### To Run
+Requires Java 1.8 <br>
 1. Clone the repo. <br>
 2. In the top directory, type: <br>
 `./gradlew build` and `./gradlew run` (MacOS/Linux)<br>
