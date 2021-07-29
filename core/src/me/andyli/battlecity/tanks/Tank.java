@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import javafx.util.Pair;
+import me.andyli.battlecity.utility.Pair;
 import me.andyli.battlecity.Constants;
 import me.andyli.battlecity.blocks.Block;
 import me.andyli.battlecity.blocks.BlockManager;
@@ -24,10 +24,10 @@ public class Tank {
     public Vector2 position, vel;
     public Sprite base;
     public boolean powerup;
-    private ArrayList<Pair<Integer, Integer>> path;
+    private ArrayList<Pair> path;
     public Sprite inv;
 
-    public Tank(Vector2 position, float speed, int direction, Sprite base, int gunType, float health, int type, ArrayList<Pair<Integer, Integer>> path, boolean powerup) {
+    public Tank(Vector2 position, float speed, int direction, Sprite base, int gunType, float health, int type, ArrayList<Pair> path, boolean powerup) {
         //initialize------------------------
         this.position = position;
         this.speed = speed;
@@ -108,18 +108,18 @@ public class Tank {
         }
     }
 
-    public Pair<Integer, Integer> getXY() {
+    public Pair getXY() {
         //get what grid the left corner is in
         int y1 = 12-((int) position.y / 48);
         int x1 = (int) position.x / 48;
-        return new Pair<>(y1, x1);
+        return new Pair(y1, x1);
     }
 
-    public Pair<Integer, Integer> getXY2() {
+    public Pair getXY2() {
         //get what grid the right corner is in
         int y1 = 12-((int) (position.y+39) / 48);
         int x1 = (int) (position.x+39) / 48;
-        return new Pair<>(y1, x1);
+        return new Pair(y1, x1);
     }
 
     public void update(SpriteBatch batch) {
@@ -460,7 +460,7 @@ public class Tank {
         if(Constants.MODE == 1) {
 
             //if on current block in path, update direction to the next path
-            if ((path.get(cur).getKey().equals(getXY().getKey()) && path.get(cur).getValue().equals(getXY().getValue())) && path.get(cur).getKey().equals(getXY2().getKey()) && path.get(cur).getValue().equals(getXY2().getValue())) {
+            if ((path.get(cur).getKey() == (getXY().getKey()) && path.get(cur).getValue() == (getXY().getValue())) && path.get(cur).getKey() == (getXY2().getKey()) && path.get(cur).getValue() == (getXY2().getValue())) {
                 if (cur != path.size() - 1) {
                     updateDirection(cur);
                     cur++;

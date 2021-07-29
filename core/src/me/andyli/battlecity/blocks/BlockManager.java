@@ -1,11 +1,9 @@
 package me.andyli.battlecity.blocks;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
-import javafx.util.Pair;
-import me.andyli.battlecity.Constants;
+import me.andyli.battlecity.utility.Pair;
 import me.andyli.battlecity.utility.Tools;
 
 import java.util.ArrayList;
@@ -194,16 +192,16 @@ public class BlockManager {
         boolean[][] seen = new boolean[13][13];
 
         //queue for BFS
-        Queue<Pair<Integer, Integer>> queue = new LinkedList<>();;
+        Queue<Pair> queue = new LinkedList<>();;
 
         //beginning
-        queue.add(new Pair<>(i, j));
+        queue.add(new Pair(i, j));
 
 
         //start BFS----------------------------------
         while(!queue.isEmpty()) {
             //get element
-            Pair<Integer, Integer> cur = queue.poll();
+            Pair cur = queue.poll();
 
             //check for visited
             if(!seen[cur.getKey()][cur.getValue()]) {
@@ -216,7 +214,7 @@ public class BlockManager {
                 if (get(arr, cur.getKey() - 1, cur.getValue()) != -1) {
                     if (!seen[cur.getKey()-1][cur.getValue()]) {
                         //not seen: add to queue
-                        queue.add(new Pair<>(cur.getKey() - 1, cur.getValue()));
+                        queue.add(new Pair(cur.getKey() - 1, cur.getValue()));
                     } else {
                         //get minimum cost to current block
                         min = Math.min(min, get(arr, cur.getKey() - 1, cur.getValue()));
@@ -225,7 +223,7 @@ public class BlockManager {
 
                 if (get(arr, cur.getKey(), cur.getValue() - 1) != -1) {
                     if (!seen[cur.getKey()][cur.getValue()-1]) {
-                        queue.add(new Pair<>(cur.getKey(), cur.getValue() - 1));
+                        queue.add(new Pair(cur.getKey(), cur.getValue() - 1));
                     } else {
                         min = Math.min(min, get(arr, cur.getKey(), cur.getValue() - 1));
                     }
@@ -233,7 +231,7 @@ public class BlockManager {
 
                 if (get(arr, cur.getKey() + 1, cur.getValue()) != -1) {
                     if (!seen[cur.getKey()+1][cur.getValue()]) {
-                        queue.add(new Pair<>(cur.getKey() + 1, cur.getValue()));
+                        queue.add(new Pair(cur.getKey() + 1, cur.getValue()));
                     } else {
                         min = Math.min(min, get(arr, cur.getKey() + 1, cur.getValue()));
                     }
@@ -241,7 +239,7 @@ public class BlockManager {
 
                 if (get(arr, cur.getKey(), cur.getValue() + 1) != -1) {
                     if (!seen[cur.getKey()][cur.getValue()+1]) {
-                        queue.add(new Pair<>(cur.getKey(), cur.getValue() + 1));
+                        queue.add(new Pair(cur.getKey(), cur.getValue() + 1));
                     } else {
                         min = Math.min(min, get(arr, cur.getKey(), cur.getValue() + 1));
                     }
@@ -275,24 +273,24 @@ public class BlockManager {
         return -1;
     }
 
-    public static ArrayList<Pair<Integer, Integer>> getPath(int i, int j) {
+    public static ArrayList<Pair> getPath(int i, int j) {
         //PATH GENERATION----------------------------------------------------------------------------------------------------------------------
         int[][] path = generatePath(i, j);
 
         //answer
-        ArrayList<Pair<Integer, Integer>> ans = new ArrayList<>();
+        ArrayList<Pair> ans = new ArrayList<>();
         //possible next moves
-        ArrayList<Pair<Integer, Integer>> possible = new ArrayList<>();
+        ArrayList<Pair> possible = new ArrayList<>();
 
 
         //current place
-        Pair<Integer, Integer> cur = new Pair<>(12, 6);
+        Pair cur = new Pair(12, 6);
 
         ans.add(cur);
 
-        possible.add(new Pair<>(12, 5));
-        possible.add(new Pair<>(12, 7));
-        possible.add(new Pair<>(11, 6));
+        possible.add(new Pair(12, 5));
+        possible.add(new Pair(12, 7));
+        possible.add(new Pair(11, 6));
 
         cur = Tools.selectRandom(possible);
         possible.clear();
@@ -331,20 +329,20 @@ public class BlockManager {
             //pick random minimum cost path----------------------------------------------
 
             if (get(path, i + 1, j) == min) {
-                //possible.add(new Pair<>(i + 1, j));
-                cur = new Pair<>(i + 1, j);
+                //possible.add(new Pair()(i + 1, j));
+                cur = new Pair(i + 1, j);
             }
             if (get(path, i - 1, j) == min) {
-                //possible.add(new Pair<>(i - 1, j));
-                cur = new Pair<>(i - 1, j);
+                //possible.add(new Pair()(i - 1, j));
+                cur = new Pair(i - 1, j);
             }
             if (get(path, i, j + 1) == min) {
-                //possible.add(new Pair<>(i, j + 1));
-                cur = new Pair<>(i, j + 1);
+                //possible.add(new Pair()(i, j + 1));
+                cur = new Pair(i, j + 1);
             }
             if (get(path, i, j - 1) == min) {
-                //possible.add(new Pair<>(i, j - 1));
-                cur = new Pair<>(i, j - 1);
+                //possible.add(new Pair()(i, j - 1));
+                cur = new Pair(i, j - 1);
             }
 
 
@@ -358,9 +356,9 @@ public class BlockManager {
         return reverse(ans);
     }
 
-    public static ArrayList<Pair<Integer, Integer>> reverse(ArrayList<Pair<Integer, Integer>> arr) {
+    public static ArrayList<Pair> reverse(ArrayList<Pair> arr) {
         //reverse an arraylist
-        Pair<Integer, Integer> temp;
+        Pair temp;
         for(int i = 0; i < arr.size()/2; ++i) {
             temp = arr.get(i);
             arr.set(i, arr.get(arr.size()-i-1));

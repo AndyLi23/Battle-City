@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import javafx.util.Pair;
+import me.andyli.battlecity.utility.Pair;
 import me.andyli.battlecity.Constants;
 import me.andyli.battlecity.screens.GameScreen;
 import me.andyli.battlecity.utility.Tools;
@@ -17,7 +17,7 @@ public class Spawner extends Block {
     private Sprite base;
     private boolean spawning = false;
     public int counter, tankType, direction;
-    ArrayList<Pair<Integer, Integer>> path;
+    ArrayList<Pair> path;
     private boolean powerup;
 
     public Spawner(Vector2 position, int i, int j) {

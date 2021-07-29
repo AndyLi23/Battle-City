@@ -142,8 +142,6 @@ public class MenuScreen implements Screen {
         x = input.getX();
         y = input.getY();
 
-        Gdx.app.log(y+"", "");
-
         if(x > 400-credit.getWidth()/2 && x < 400+credit.getWidth()/2 && y < 256 && y > 232) {
             credit.setColor(Color.LIGHT_GRAY);
             if(input.isButtonJustPressed(0)) {
