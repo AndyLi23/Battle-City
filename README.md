@@ -7,6 +7,10 @@ Written entirely in Java with LibGDX. All images are drawn by the author.
 
 Although development has been concluded for now, bugs may still be present. If there are any, please email the author at andyliqy@gmail.com.
 
+### Demo
+
+https://user-images.githubusercontent.com/54689920/197891898-338627fa-2484-4c4e-a778-47459180d5d0.mp4
+
 ### How to play
 Defend your flag. Shoot enemy tanks.
 
